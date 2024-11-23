@@ -94,11 +94,11 @@ int RaySphere(
 	return(true);
 }
 
-size_t get_intersecting_line_count(
+long long unsigned int get_intersecting_line_count(
 	const vector_3 sphere_location,
 	const real_type sphere_radius)
 {
-	size_t count = 0;
+	long long unsigned int count = 0;
 
 	for (size_t i = 0; i < unit_vectors.size(); i++)
 	{

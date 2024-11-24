@@ -7,22 +7,17 @@ long long unsigned int get_intersecting_line_count(
 {
 	long long unsigned int count = 0;
 
+	vector_3 cross_section_edge_dot(sphere_location.x, sphere_radius, 0);
+	cross_section_edge_dot.normalize();
+
+	vector_3 receiver_dot(sphere_location.x, 0, 0);
+	receiver_dot.normalize();
+
+	const real_type min_dot = cross_section_edge_dot.dot(receiver_dot);
+
 	for (size_t i = 0; i < unit_vectors.size(); i++)
-	{
-		const vector_3 veca = unit_vectors[i];
-
-		vector_3 vecb(sphere_location.x, sphere_radius, 0);
-		vecb.normalize();
-
-		vector_3 vecc(sphere_location.x, 0, 0);
-		vecc.normalize();
-
-		real_type veca_dot = veca.dot(vecc);
-		real_type vecb_dot = vecb.dot(vecc);
-
-		if (veca_dot >= vecb_dot)
+		if (unit_vectors[i].dot(receiver_dot) >= min_dot)
 			count++;
-	}
 
 	return count;
 }
@@ -30,7 +25,7 @@ long long unsigned int get_intersecting_line_count(
 int main(int argc, char** argv)
 {
 	const real_type D = 3; // Dimension
-	const size_t n = 100000; // Oscillator count
+	const size_t n = 10000000; // Oscillator count
 
 	cout << "Allocating memory for oscillators" << endl;
 	unit_vectors.resize(n);
@@ -54,9 +49,9 @@ int main(int argc, char** argv)
 	const size_t distance_res = 1000;
 	const real_type distance_step_size = (end_distance - start_distance) / (distance_res - 1);
 
-	for (size_t z = 0; z < distance_res; z++)
+	for (size_t step_index = 0; step_index < distance_res; step_index++)
 	{
-		const real_type r = start_distance + z * distance_step_size;
+		const real_type r = start_distance + step_index * distance_step_size;
 
 		const vector_3 receiver_pos(r, 0, 0);
 		const real_type receiver_radius = 1;

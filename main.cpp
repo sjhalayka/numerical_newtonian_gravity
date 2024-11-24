@@ -57,8 +57,10 @@ int main(int argc, char** argv)
 
 	const real_type distance_step_size = (end_distance - start_distance) / (distance_res - 1);
 
-	for (real_type r = start_distance; r <= end_distance; r += distance_step_size)
+	for (size_t z = 0; z < distance_res; z++)
 	{
+		const real_type r = start_distance + z * distance_step_size;
+
 		const vector_3 receiver_pos(r, 0, 0);
 		const real_type receiver_radius = 1;
 

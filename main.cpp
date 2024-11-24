@@ -36,7 +36,7 @@ int main(int argc, char** argv)
 		const vector_3 receiver_pos(r, 0, 0);
 		const real_type receiver_radius = 1;
 
-		const real_type epsilon = 1.0;// 0.1;
+		const real_type epsilon = 1.0;
 
 		vector_3 receiver_pos_plus = receiver_pos;
 		receiver_pos_plus.x += epsilon;

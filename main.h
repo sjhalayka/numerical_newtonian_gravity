@@ -102,13 +102,19 @@ long long unsigned int get_intersecting_line_count(
 
 	for (size_t i = 0; i < unit_vectors.size(); i++)
 	{
-		if (unit_vectors[i].dot(sphere_location) > 0)
-		{
-			real_type mu1 = 0, mu2 = 0;
+		vector_3 veca = unit_vectors[i];
 
-			if (RaySphere(unit_vectors[i], unit_vectors[i] + unit_vectors[i], sphere_location, sphere_radius, &mu1, &mu2))
-				count++;
-		}
+		vector_3 vecb(sphere_location.x, sphere_radius, 0);
+		vecb.normalize();
+
+		vector_3 vecc(sphere_location.x, 0, 0);
+		vecc.normalize();
+
+		real_type veca_dot = veca.dot(vecc);
+		real_type vecb_dot = vecb.dot(vecc);
+
+		if (veca_dot >= vecb_dot)
+			count++;
 	}
 
 	return count;

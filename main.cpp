@@ -9,7 +9,7 @@ long long unsigned int get_intersecting_line_count(
 
 	for (size_t i = 0; i < unit_vectors.size(); i++)
 	{
-		vector_3 veca = unit_vectors[i];
+		const vector_3 veca = unit_vectors[i];
 
 		vector_3 vecb(sphere_location.x, sphere_radius, 0);
 		vecb.normalize();
@@ -30,7 +30,7 @@ long long unsigned int get_intersecting_line_count(
 int main(int argc, char** argv)
 {
 	const real_type D = 3; // Dimension
-	const size_t n = 10000000; // Oscillator count
+	const size_t n = 100000; // Oscillator count
 
 	cout << "Allocating memory for oscillators" << endl;
 	unit_vectors.resize(n);
@@ -46,15 +46,12 @@ int main(int argc, char** argv)
 	}
 
 	string filename = to_string(D) + ".txt";
-
 	ofstream out_file(filename.c_str());
 	out_file << setprecision(30);
 
 	const real_type start_distance = 10;
 	const real_type end_distance = 100;
-
-	const size_t distance_res = 10000;
-
+	const size_t distance_res = 1000;
 	const real_type distance_step_size = (end_distance - start_distance) / (distance_res - 1);
 
 	for (size_t z = 0; z < distance_res; z++)

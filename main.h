@@ -94,31 +94,6 @@ int RaySphere(
 	return(true);
 }
 
-long long unsigned int get_intersecting_line_count(
-	const vector_3 sphere_location,
-	const real_type sphere_radius)
-{
-	long long unsigned int count = 0;
-
-	for (size_t i = 0; i < unit_vectors.size(); i++)
-	{
-		vector_3 veca = unit_vectors[i];
-
-		vector_3 vecb(sphere_location.x, sphere_radius, 0);
-		vecb.normalize();
-
-		vector_3 vecc(sphere_location.x, 0, 0);
-		vecc.normalize();
-
-		real_type veca_dot = veca.dot(vecc);
-		real_type vecb_dot = vecb.dot(vecc);
-
-		if (veca_dot >= vecb_dot)
-			count++;
-	}
-
-	return count;
-}
 
 vector_3 RandomUnitVector(void)
 {

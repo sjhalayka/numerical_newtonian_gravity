@@ -1,6 +1,32 @@
 #include "main.h"
 
 
+long long unsigned int get_intersecting_line_count(
+	const vector_3 sphere_location,
+	const real_type sphere_radius)
+{
+	long long unsigned int count = 0;
+
+	for (size_t i = 0; i < unit_vectors.size(); i++)
+	{
+		vector_3 veca = unit_vectors[i];
+
+		vector_3 vecb(sphere_location.x, sphere_radius, 0);
+		vecb.normalize();
+
+		vector_3 vecc(sphere_location.x, 0, 0);
+		vecc.normalize();
+
+		real_type veca_dot = veca.dot(vecc);
+		real_type vecb_dot = vecb.dot(vecc);
+
+		if (veca_dot >= vecb_dot)
+			count++;
+	}
+
+	return count;
+}
+
 int main(int argc, char** argv)
 {
 	const real_type D = 3; // Dimension
@@ -27,7 +53,7 @@ int main(int argc, char** argv)
 	const real_type start_distance = 10;
 	const real_type end_distance = 100;
 
-	const size_t distance_res = 1000;
+	const size_t distance_res = 10000;
 
 	const real_type distance_step_size = (end_distance - start_distance) / (distance_res - 1);
 

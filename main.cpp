@@ -41,6 +41,52 @@ int main(int argc, char** argv)
 			cout << "Getting pseudorandom locations: " << i << endl;
 	}
 
+	//const size_t repulsion_rounds = 10;
+
+	//for (size_t i = 0; i < repulsion_rounds; i++)
+	//{
+	//	cout << "Repulsing round " << i << endl;
+
+	//	vector<vector_3> unit_vectors_backup = unit_vectors;
+
+	//	for (size_t j = 0; j < n; j++)
+	//	{
+	//		vector_3 accel;
+
+	//		for (size_t k = j + 1; k < n; k++)
+	//		{
+	//			if (j == k)
+	//				continue;
+
+	//			vector_3 grav_dir = unit_vectors_backup[j] - unit_vectors_backup[k];
+
+	//			real_type distance = grav_dir.length();
+	//			grav_dir.normalize();
+
+	//			accel += -grav_dir / pow(distance, 2.0);
+	//		}
+
+	//		unit_vectors[j] += accel;
+	//	}
+
+	//	for (size_t j = 0; j < n; j++)
+	//		unit_vectors[j].normalize();
+	//}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 	string filename = "newton.txt";
 	ofstream out_file(filename.c_str());
 	out_file << setprecision(30);

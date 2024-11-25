@@ -26,7 +26,8 @@ long long unsigned int get_intersecting_line_count(
 
 int main(int argc, char** argv)
 {
-	const size_t n = 1000000; // Oscillator count
+	const size_t n = 100000; // Oscillator count
+
 
 	cout << "Allocating memory for oscillators" << endl;
 	vector<vector_3> unit_vectors(n);
@@ -40,8 +41,6 @@ int main(int argc, char** argv)
 		if (i % output_mod == 0)
 			cout << "Getting pseudorandom locations: " << i << endl;
 	}
-
-
 
 
 	//const size_t repulsion_rounds = 10;
@@ -61,12 +60,13 @@ int main(int argc, char** argv)
 	//			if (j == k)
 	//				continue;
 
-	//			vector_3 grav_dir = unit_vectors_backup[j] - unit_vectors_backup[k];
-
+	//			vector_3 grav_dir = unit_vectors_backup[k] - unit_vectors_backup[j];
+	//			
 	//			real_type distance = grav_dir.length();
 	//			grav_dir.normalize();
 
-	//			accel += -grav_dir / pow(distance, 2.0);
+	//			// Repulsion
+	//			accel += -grav_dir / distance;
 	//		}
 
 	//		unit_vectors[j] += accel;
@@ -75,19 +75,6 @@ int main(int argc, char** argv)
 	//	for (size_t j = 0; j < n; j++)
 	//		unit_vectors[j].normalize();
 	//}
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 	string filename = "newton.txt";

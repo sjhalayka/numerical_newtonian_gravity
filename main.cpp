@@ -7,25 +7,25 @@ long long unsigned int get_intersecting_line_count(
 {
 	long long unsigned int count = 0;
 
-	vector_3 cross_section_edge_dot(sphere_location.x, sphere_radius, 0);
-	cross_section_edge_dot.normalize();
+	vector_3 cross_section_edge_dir(sphere_location.x, sphere_radius, 0);
+	cross_section_edge_dir.normalize();
 
-	vector_3 receiver_dot(sphere_location.x, 0, 0);
-	receiver_dot.normalize();
+	vector_3 receiver_dir(sphere_location.x, 0, 0);
+	receiver_dir.normalize();
 
-	const real_type min_dot = cross_section_edge_dot.dot(receiver_dot);
+	const real_type min_dot = cross_section_edge_dir.dot(receiver_dir);
 
 	for (size_t i = 0; i < unit_vectors.size(); i++)
-		if (unit_vectors[i].dot(receiver_dot) >= min_dot)
+		if (unit_vectors[i].dot(receiver_dir) >= min_dot)
 			count++;
 
 	return count;
 }
 
+
 int main(int argc, char** argv)
 {
-	const real_type D = 3; // Dimension
-	const size_t n = 10000000; // Oscillator count
+	const size_t n = 1000000; // Oscillator count
 
 	cout << "Allocating memory for oscillators" << endl;
 	unit_vectors.resize(n);
@@ -40,7 +40,7 @@ int main(int argc, char** argv)
 			cout << "Getting pseudorandom locations: " << i << " of " << n << endl;
 	}
 
-	string filename = to_string(D) + ".txt";
+	string filename = "newton.txt";
 	ofstream out_file(filename.c_str());
 	out_file << setprecision(30);
 
@@ -54,7 +54,7 @@ int main(int argc, char** argv)
 		const real_type r = start_distance + step_index * distance_step_size;
 
 		const vector_3 receiver_pos(r, 0, 0);
-		const real_type receiver_radius = 1;
+		const real_type receiver_radius = 1.0;
 
 		const real_type epsilon = 1.0;
 
@@ -66,9 +66,9 @@ int main(int argc, char** argv)
 		const long long signed int collision_count = get_intersecting_line_count(receiver_pos, receiver_radius);
 		vector_3 gradient(static_cast<real_type>(collision_count_plus - collision_count) / epsilon, 0, 0);
 
-		const real_type gradient_strength = gradient.length() * pow(receiver_pos.x, D);
+		const real_type gradient_strength = gradient.length() * pow(receiver_pos.x, 3.0);
 
-		cout << "D: " << D << " r: " << r << " " << gradient_strength << endl;
+		cout << "r: " << r << " gradient strength: " << gradient_strength << endl;
 
 		out_file << r << " " << gradient_strength << endl;
 	}

@@ -41,6 +41,9 @@ int main(int argc, char** argv)
 			cout << "Getting pseudorandom locations: " << i << endl;
 	}
 
+
+
+
 	//const size_t repulsion_rounds = 10;
 
 	//for (size_t i = 0; i < repulsion_rounds; i++)
@@ -49,7 +52,7 @@ int main(int argc, char** argv)
 
 	//	vector<vector_3> unit_vectors_backup = unit_vectors;
 
-	//	for (size_t j = 0; j < n; j++)
+	//	for (size_t j = 0; j < n - 1; j++)
 	//	{
 	//		vector_3 accel;
 

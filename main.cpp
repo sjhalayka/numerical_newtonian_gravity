@@ -37,7 +37,7 @@ int main(int argc, char** argv)
 		static const size_t output_mod = 10000;
 
 		if (i % output_mod == 0)
-			cout << "Getting pseudorandom locations: " << i << " of " << n << endl;
+			cout << "Getting pseudorandom locations: " << i << endl;
 	}
 
 	string filename = "newton.txt";

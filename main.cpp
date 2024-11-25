@@ -2,6 +2,7 @@
 
 
 long long unsigned int get_intersecting_line_count(
+	const vector<vector_3> &unit_vectors,
 	const vector_3 sphere_location,
 	const real_type sphere_radius)
 {
@@ -28,7 +29,7 @@ int main(int argc, char** argv)
 	const size_t n = 1000000; // Oscillator count
 
 	cout << "Allocating memory for oscillators" << endl;
-	unit_vectors.resize(n);
+	vector<vector_3> unit_vectors(n);
 
 	for (size_t i = 0; i < n; i++)
 	{
@@ -47,6 +48,7 @@ int main(int argc, char** argv)
 	const real_type start_distance = 10;
 	const real_type end_distance = 100;
 	const size_t distance_res = 1000;
+
 	const real_type distance_step_size = (end_distance - start_distance) / (distance_res - 1);
 
 	for (size_t step_index = 0; step_index < distance_res; step_index++)
@@ -62,8 +64,8 @@ int main(int argc, char** argv)
 		receiver_pos_plus.x += epsilon;
 
 		// https://en.wikipedia.org/wiki/Directional_derivative
-		const long long signed int collision_count_plus = get_intersecting_line_count(receiver_pos_plus, receiver_radius);
-		const long long signed int collision_count = get_intersecting_line_count(receiver_pos, receiver_radius);
+		const long long signed int collision_count_plus = get_intersecting_line_count(unit_vectors, receiver_pos_plus, receiver_radius);
+		const long long signed int collision_count = get_intersecting_line_count(unit_vectors, receiver_pos, receiver_radius);
 		vector_3 gradient(static_cast<real_type>(collision_count_plus - collision_count) / epsilon, 0, 0);
 
 		const real_type gradient_strength = gradient.length() * pow(receiver_pos.x, 3.0);

@@ -52,8 +52,6 @@ const real_type G = 6.67430e-11;
 const real_type c = 299792458;
 const real_type pi = 4.0 * atan(1.0);
 
-vector<vector_3> unit_vectors;
-
 
 vector_3 RandomUnitVector(void)
 {

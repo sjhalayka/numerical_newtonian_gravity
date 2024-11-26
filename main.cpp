@@ -26,23 +26,23 @@
 
 
 long long unsigned int get_intersecting_line_count(
-	const size_t n,
+	const real_type n,
 	const vector_3 sphere_location,
 	const real_type sphere_radius)
 {
-	real_type big_area = 4 * pi * sphere_location.x * sphere_location.x;
-	real_type small_area = pi * sphere_radius * sphere_radius;
+	real_type big_area = 4 * sphere_location.x * sphere_location.x;
+	real_type small_area = sphere_radius * sphere_radius;
 	real_type ratio = small_area / big_area;
 	
-	return static_cast<long long unsigned int>(static_cast<real_type>(n) * ratio);
+	return static_cast<long long unsigned int>(n * ratio);
 }
 
 
 int main(int argc, char** argv)
 {
 	// Field line count
-	const size_t n = 100000000000;
-
+	//const size_t n = 100000000000;
+	const real_type n = 1e20;
 
 	//cout << "Allocating memory for field lines" << endl;
 	//vector<vector_3> unit_vectors(n);
@@ -62,8 +62,8 @@ int main(int argc, char** argv)
 	ofstream out_file(filename.c_str());
 	out_file << setprecision(30);
 
-	const real_type start_distance = 10;
-	const real_type end_distance = 100;
+	const real_type start_distance = 100;
+	const real_type end_distance = 1000;
 	const size_t distance_res = 1000;
 
 	const real_type distance_step_size = (end_distance - start_distance) / (distance_res - 1);
@@ -73,7 +73,7 @@ int main(int argc, char** argv)
 		const real_type r = start_distance + step_index * distance_step_size;
 
 		const vector_3 receiver_pos(r, 0, 0);
-		const real_type receiver_radius = 0.25;
+		const real_type receiver_radius = 0.01;
 
 		const real_type epsilon = 0.01;
 
@@ -85,7 +85,7 @@ int main(int argc, char** argv)
 		const long long signed int collision_count = get_intersecting_line_count(n, receiver_pos, receiver_radius);
 		vector_3 gradient(static_cast<real_type>(collision_count_plus - collision_count) / epsilon, 0, 0);
 
-		const real_type gradient_strength = gradient.length();// *pow(receiver_pos.x, 3.0);
+		const real_type gradient_strength = gradient.length();
 
 		cout << "r: " << r << " gradient strength: " << gradient_strength << endl;
 

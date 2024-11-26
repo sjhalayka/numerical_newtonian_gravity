@@ -73,9 +73,9 @@ int main(int argc, char** argv)
 		const real_type r = start_distance + step_index * distance_step_size;
 
 		const vector_3 receiver_pos(r, 0, 0);
-		const real_type receiver_radius = 0.00001;
+		const real_type receiver_radius = 1;
 
-		const real_type epsilon = 0.001;
+		const real_type epsilon = 0.1;
 
 		vector_3 receiver_pos_plus = receiver_pos;
 		receiver_pos_plus.x += epsilon;
@@ -84,7 +84,7 @@ int main(int argc, char** argv)
 		const real_type collision_count_plus = get_intersecting_line_count(n, receiver_pos_plus, receiver_radius);
 		const real_type collision_count = get_intersecting_line_count(n, receiver_pos, receiver_radius);
 		const real_type gradient = (collision_count_plus - collision_count) / epsilon;
-		const real_type gradient_strength = -gradient / (receiver_radius* receiver_radius);
+		const real_type gradient_strength = -gradient / (4 * pi * receiver_radius * receiver_radius);
 
 		cout << "r: " << r << " gradient strength: " << gradient_strength << endl;
 

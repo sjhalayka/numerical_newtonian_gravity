@@ -1,11 +1,10 @@
 #include "main.h"
 
-
-
-
-
-
-bool circle_intersect(vector_3 location, const vector_3 normal, const real_type circle_location, const real_type circle_radius)
+bool circle_intersect(
+	vector_3 location, 
+	const vector_3 normal, 
+	const real_type circle_location, 
+	const real_type circle_radius)
 {
 	if (normal.dot(circle_location) <= 0)
 		return false;
@@ -31,9 +30,7 @@ bool circle_intersect(vector_3 location, const vector_3 normal, const real_type 
 	return true;
 }
 
-
-
-long long signed int get_intersecting_line_count(
+long long signed int get_intersecting_line_count_integer(
 	const size_t n,
 	const vector_3 sphere_location,
 	const real_type sphere_radius)
@@ -52,83 +49,26 @@ long long signed int get_intersecting_line_count(
 	return count;
 }
 
+real_type get_intersecting_line_count_real(
+	const real_type n,
+	const vector_3 sphere_location,
+	const real_type sphere_radius)
+{
+	const real_type big_area =
+		4 * pi
+		* sphere_location.x * sphere_location.x;
 
+	const real_type small_area =
+		pi
+		* sphere_radius * sphere_radius;
 
+	const real_type ratio =
+		small_area
+		/ big_area;
 
+	return n * ratio;
+}
 
-
-
-
-//
-//real_type get_intersecting_line_count(
-//	const real_type n,
-//	const vector_3 sphere_location,
-//	const real_type sphere_radius)
-//{
-//	const real_type big_area =
-//		4 * pi
-//		* sphere_location.x * sphere_location.x;
-//
-//	const real_type small_area =
-//		pi
-//		* sphere_radius * sphere_radius;
-//
-//	const real_type ratio =
-//		small_area
-//		/ big_area;
-//
-//	return n * ratio;
-//}
-
-//
-//bool circle_intersect(vector_3 location, const vector_3 normal, const real_type circle_location, const real_type circle_radius)
-//{
-//	if (normal.dot(circle_location) <= 0)
-//		return false;
-//
-//	vector_3 v = normal;
-//
-//	const real_type ratio = v.x / circle_location;
-//
-//	const vector_3 circle_origin(circle_location, 0, 0);
-//
-//	v.y = v.y / ratio;
-//	v.z = v.z / ratio;
-//	v.x = circle_location;
-//
-//	vector_3 v2;
-//	v2.x = circle_origin.x - v.x;
-//	v2.y = circle_origin.y - v.y;
-//	v2.z = circle_origin.z - v.z;
-//
-//	if (v2.length() > circle_radius)
-//		return false;
-//
-//	return true;
-//}
-
-//
-//
-//size_t get_intersecting_line_count(
-//	//const vector<vector_3>& unit_positions,
-//	//const vector<vector_3>& unit_directions,
-//	size_t n,
-//	const vector_3 sphere_location,
-//	const real_type sphere_radius)
-//{
-//	size_t count = 0;
-//
-//	for (size_t i = 0; i < n; i++)
-//	{
-//		vector_3 pos = RandomUnitVector();
-//		vector_3 normal = pos;
-//
-//		if (circle_intersect(pos, normal, sphere_location.x, sphere_radius))
-//			count++;
-//	}
-//
-//	return count;
-//}
 
 int main(int argc, char** argv)
 {
@@ -160,7 +100,7 @@ int main(int argc, char** argv)
 
 	const real_type start_distance = (emitter_radius + receiver_radius);
 	const real_type end_distance = 100.0;
-	const size_t distance_res = 100;
+	const size_t distance_res = 1000;
 		
 	const real_type distance_step_size =
 		(end_distance - start_distance)
@@ -178,15 +118,15 @@ int main(int argc, char** argv)
 		vector_3 receiver_pos_plus = receiver_pos;
 		receiver_pos_plus.x += epsilon;
 
-		const long long signed int collision_count_plus =
-			get_intersecting_line_count(
-				static_cast<size_t>(n),
+		const real_type collision_count_plus =
+			get_intersecting_line_count_integer(
+				n,
 				receiver_pos_plus,
 				receiver_radius);
 
-		const long long signed int collision_count =
-			get_intersecting_line_count(
-				static_cast<size_t>(n),
+		const real_type collision_count =
+			get_intersecting_line_count_integer(
+				n,
 				receiver_pos,
 				receiver_radius);
 
@@ -199,18 +139,16 @@ int main(int argc, char** argv)
 			/ (receiver_radius * receiver_radius);
 
 		const real_type newton_strength =
-			G * emitter_mass / ( pow(receiver_pos.x, 2.0));
+			G * emitter_mass / pow(receiver_pos.x, 2.0);
 
 		const real_type newton_strength_ =
 			gradient_strength * receiver_pos.x * c * hbar * log(2)
 			/ (k * 2 * pi * emitter_mass);
 
-		cout << newton_strength / newton_strength_ << endl;
+		cout << "r: " << r << " newton ratio: "
+			<< newton_strength / newton_strength_ << endl;
 
-		cout << "r: " << r << " gradient strength: "
-			<< gradient_strength << endl;
-
-		out_file << r << " " << gradient_strength << endl;
+		out_file << r << " " << newton_strength / newton_strength_ << endl;
 	}
 
 	out_file.close();

@@ -6,18 +6,18 @@ bool circle_intersect(
 	const real_type circle_location, 
 	const real_type circle_radius)
 {
-	if (normal.dot(circle_location) <= 0)
+	const vector_3 circle_origin(circle_location, 0, 0);
+
+	if (normal.dot(circle_origin) <= 0)
 		return false;
 
-	vector_3 v = normal;
+	vector_3 v = location + normal;
 
-	const real_type ratio = v.x / circle_location;
-
-	const vector_3 circle_origin(circle_location, 0, 0);
+	const real_type ratio = v.x / circle_origin.x;
 
 	v.y = v.y / ratio;
 	v.z = v.z / ratio;
-	v.x = circle_location;
+	v.x = circle_origin.x;
 
 	vector_3 v2;
 	v2.x = circle_origin.x - v.x;
@@ -37,12 +37,28 @@ long long signed int get_intersecting_line_count_integer(
 {
 	long long signed int count = 0;
 
+	//static vector<vector_3> unit_pos;
+	//static vector<vector_3> unit_normal;
+
+	//if (unit_pos.size() != n)
+	//{
+	//	unit_pos.resize(n);
+	//	unit_normal.resize(n);
+
+	//	for (size_t i = 0; i < n; i++)
+	//	{
+	//		vector_3 p = RandomUnitVector();
+
+	//		unit_pos[i] = p;
+	//		unit_normal[i] = p;
+	//	}
+	//}
+
 	for (size_t i = 0; i < n; i++)
 	{
-		vector_3 pos = RandomUnitVector();
-		vector_3 normal = pos;
+		vector_3 p = RandomUnitVector();
 
-		if (circle_intersect(pos, normal, sphere_location.x, sphere_radius))
+		if (circle_intersect(p, p, sphere_location.x, sphere_radius))
 			count++;
 	}
 
@@ -73,7 +89,7 @@ real_type get_intersecting_line_count_real(
 int main(int argc, char** argv)
 {
 	const real_type receiver_radius = 1.0;
-	real_type emitter_radius = 1.0;// sqrt((10000000 * G * hbar * log(2.0)) / (k * c3 * pi));
+	real_type emitter_radius = sqrt((1e6 * G * hbar * log(2.0)) / (k * c3 * pi));
 
 	const real_type emitter_area =
 		4.0 * pi * emitter_radius * emitter_radius;
@@ -98,9 +114,9 @@ int main(int argc, char** argv)
 	ofstream out_file(filename.c_str());
 	out_file << setprecision(30);
 
-	const real_type start_distance = (emitter_radius + receiver_radius);
+	const real_type start_distance = 2*receiver_radius;
 	const real_type end_distance = 100.0;
-	const size_t distance_res = 1000;
+	const size_t distance_res = 10000;
 		
 	const real_type distance_step_size =
 		(end_distance - start_distance)
@@ -134,6 +150,25 @@ int main(int argc, char** argv)
 			(static_cast<real_type>(collision_count_plus) - static_cast<real_type>(collision_count))
 			/ epsilon;
 
+		const real_type collision_count_plus_integer =
+			get_intersecting_line_count_integer(
+				n,
+				receiver_pos_plus,
+				receiver_radius);
+
+		const real_type collision_count_integer =
+			get_intersecting_line_count_integer(
+				n,
+				receiver_pos,
+				receiver_radius);
+
+		const real_type gradient_integer =
+			(static_cast<real_type>(collision_count_plus_integer) - static_cast<real_type>(collision_count_integer))
+			/ epsilon;
+
+		cout << gradient / gradient_integer << endl;
+
+
 		const real_type gradient_strength =
 			-gradient
 			/ (receiver_radius * receiver_radius);
@@ -143,12 +178,12 @@ int main(int argc, char** argv)
 
 		const real_type newton_strength_ =
 			gradient_strength * receiver_pos.x * c * hbar * log(2)
-			/ (k * 2 * pi * emitter_mass);
+			/ (k * 2 * pi * emitter_mass);	
 
-		cout << "r: " << r << " newton ratio: "
-			<< newton_strength / newton_strength_ << endl;
+//		cout << "r: " << r << " newton strength: "
+//			<< newton_strength << endl;
 
-		out_file << r << " " << newton_strength / newton_strength_ << endl;
+		out_file << r << " " << gradient / gradient_integer << endl;
 	}
 
 	out_file.close();

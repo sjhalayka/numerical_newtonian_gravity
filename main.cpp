@@ -37,23 +37,6 @@ long long signed int get_intersecting_line_count_integer(
 {
 	long long signed int count = 0;
 
-	//static vector<vector_3> unit_pos;
-	//static vector<vector_3> unit_normal;
-
-	//if (unit_pos.size() != n)
-	//{
-	//	unit_pos.resize(n);
-	//	unit_normal.resize(n);
-
-	//	for (size_t i = 0; i < n; i++)
-	//	{
-	//		vector_3 p = RandomUnitVector();
-
-	//		unit_pos[i] = p;
-	//		unit_normal[i] = p;
-	//	}
-	//}
-
 	static const real_type D = 3.0;
 	static const real_type disk_like = 3 - D;
 
@@ -94,7 +77,7 @@ real_type get_intersecting_line_count_real(
 int main(int argc, char** argv)
 {
 	const real_type receiver_radius = 1.0;
-	real_type emitter_radius = sqrt((1e7 * G * hbar * log(2.0)) / (k * c3 * pi));
+	real_type emitter_radius = sqrt((1e8 * G * hbar * log(2.0)) / (k * c3 * pi));
 
 	const real_type emitter_area =
 		4.0 * pi * emitter_radius * emitter_radius;
@@ -113,7 +96,7 @@ int main(int argc, char** argv)
 
 	const real_type start_distance = 2.0 * receiver_radius;
 	const real_type end_distance = 100.0 * receiver_radius;
-	const size_t distance_res = 1000;
+	const size_t distance_res = 10;
 
 	const real_type distance_step_size =
 		(end_distance - start_distance)
@@ -165,22 +148,26 @@ int main(int argc, char** argv)
 
 		cout << gradient / gradient_integer << endl;
 
-
 		const real_type gradient_strength =
 			-gradient
 			/ (receiver_radius * receiver_radius);
 
-		const real_type newton_strength =
-			G * emitter_mass / pow(receiver_pos.x, 2.0);
+		const real_type gradient_strength_ =
+			n
+			/ (2.0 * pow(receiver_pos.x, 3.0));
 
-		const real_type newton_strength_ =
-			gradient_strength * receiver_pos.x * c * hbar * log(2)
-			/ (k * 2 * pi * emitter_mass);
+		cout << gradient_strength_ / gradient_strength << endl;
 
-		//		cout << "r: " << r << " newton strength: "
-		//			<< newton_strength << endl;
+		//const real_type newton_strength =
+		//	G * emitter_mass / pow(receiver_pos.x, 2.0);
 
-		out_file << r << " " << gradient / gradient_integer << endl;
+		//const real_type newton_strength_ =
+		//	gradient_strength * receiver_pos.x * c * hbar * log(2)
+		//	/ (k * 2 * pi * emitter_mass);
+
+		cout << endl;
+
+		//out_file << r << " " << gradient / gradient_integer << endl;
 	}
 
 	out_file.close();

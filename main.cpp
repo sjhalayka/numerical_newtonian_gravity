@@ -1,9 +1,9 @@
 #include "main.h"
 
 bool circle_intersect(
-	vector_3 location, 
-	const vector_3 normal, 
-	const real_type circle_location, 
+	vector_3 location,
+	const vector_3 normal,
+	const real_type circle_location,
 	const real_type circle_radius)
 {
 	const vector_3 circle_origin(circle_location, 0, 0);
@@ -54,11 +54,16 @@ long long signed int get_intersecting_line_count_integer(
 	//	}
 	//}
 
+	static const real_type D = 3.0;
+	static const real_type disk_like = 3 - D;
+
 	for (size_t i = 0; i < n; i++)
 	{
-		vector_3 p = RandomUnitVector();
+		const vector_3 p = RandomUnitVector();
+		const vector_4 q = RayEllipsoid(vector_3(0, 0, 0), p, vector_3(1.0 - disk_like, 1.0, 1.0 - disk_like));
+		const vector_3 normal = EllipsoidNormal(vector_3(q.y, q.z, q.w), vector_3(1.0 - disk_like, 1.0, 1.0 - disk_like));
 
-		if (circle_intersect(p, p, sphere_location.x, sphere_radius))
+		if (circle_intersect(vector_3(0, 0, 0), normal, sphere_location.x, sphere_radius))
 			count++;
 	}
 
@@ -89,7 +94,7 @@ real_type get_intersecting_line_count_real(
 int main(int argc, char** argv)
 {
 	const real_type receiver_radius = 1.0;
-	real_type emitter_radius = sqrt((1e6 * G * hbar * log(2.0)) / (k * c3 * pi));
+	real_type emitter_radius = sqrt((1e7 * G * hbar * log(2.0)) / (k * c3 * pi));
 
 	const real_type emitter_area =
 		4.0 * pi * emitter_radius * emitter_radius;
@@ -102,22 +107,14 @@ int main(int argc, char** argv)
 
 	const real_type emitter_mass = c2 * emitter_radius / (2.0 * G);
 
-	// 2.39545e47 is the 't Hooft-Susskind constant:
-	// the number of field lines for a black hole of
-	// unit Schwarzschild radius
-	//
-	//const real_type G_ = 
-	//	(k * c3 * pi) 
-	//	/ (log(2.0) * hbar * 2.39545e47);
-
 	const string filename = "newton.txt";
 	ofstream out_file(filename.c_str());
 	out_file << setprecision(30);
 
-	const real_type start_distance = 2*receiver_radius;
-	const real_type end_distance = 100.0;
-	const size_t distance_res = 10000;
-		
+	const real_type start_distance = 2.0 * receiver_radius;
+	const real_type end_distance = 100.0 * receiver_radius;
+	const size_t distance_res = 1000;
+
 	const real_type distance_step_size =
 		(end_distance - start_distance)
 		/ (distance_res - 1);
@@ -178,10 +175,10 @@ int main(int argc, char** argv)
 
 		const real_type newton_strength_ =
 			gradient_strength * receiver_pos.x * c * hbar * log(2)
-			/ (k * 2 * pi * emitter_mass);	
+			/ (k * 2 * pi * emitter_mass);
 
-//		cout << "r: " << r << " newton strength: "
-//			<< newton_strength << endl;
+		//		cout << "r: " << r << " newton strength: "
+		//			<< newton_strength << endl;
 
 		out_file << r << " " << gradient / gradient_integer << endl;
 	}

@@ -5,6 +5,7 @@
 #include "custom_math.h"
 using custom_math::vector_3;
 using custom_math::line_segment_3;
+using custom_math::vector_4;
 
 #include <iostream>
 using std::cout;
@@ -72,6 +73,40 @@ vector_3 RandomUnitVector(void)
 	
 	return vector_3(x, y, z).normalize();
 }
+
+
+// https://www.shadertoy.com/view/7d3BRl
+// https://math.stackexchange.com/questions/2931909/normal-of-a-point-on-the-surface-of-an-ellipsoid
+
+vector_4 RayEllipsoid(vector_3 ro, vector_3 rd, vector_3 r)
+{
+	vector_3 r2 = r * r;
+	real_type a = rd.dot(rd / r2);
+	real_type b = ro.dot(rd / r2);
+	real_type c = ro.dot(ro / r2);
+	real_type h = b * b - a * (c - 1.0);
+
+	if (h < 0.0)
+		return vector_4(-1, 0, 0, 0);
+
+	real_type t = (-b - sqrt(h)) / a;
+
+	vector_3 pos = ro + rd * t;
+
+	return vector_4(t, pos.x, pos.y, pos.z);
+}
+
+vector_3 EllipsoidNormal(vector_3 pos, vector_3 ra)
+{
+	vector_3 normal = (pos / (ra * ra));
+	normal.normalize();
+
+	return -normal;
+}
+
+
+
+
 
 
 #endif

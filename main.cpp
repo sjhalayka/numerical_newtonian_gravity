@@ -1,5 +1,8 @@
 #include "main.h"
 
+const real_type D = 3.0;
+const real_type disk_like = 3.0 - D;
+
 bool circle_intersect(
 	vector_3 location,
 	const vector_3 normal,
@@ -37,12 +40,10 @@ long long signed int get_intersecting_line_count_integer(
 {
 	long long signed int count = 0;
 
-	static const real_type D = 3.0;
-	static const real_type disk_like = 3 - D;
-
 	for (size_t i = 0; i < n; i++)
 	{
-		const vector_3 p = RandomUnitVector();
+		// to do: try smaller than unit random vector
+		const vector_3 p = RandomUnitVector();/* * 0.0001;*/
 		const vector_4 q = RayEllipsoid(vector_3(0, 0, 0), p, vector_3(1.0 - disk_like, 1.0, 1.0 - disk_like));
 		const vector_3 normal = EllipsoidNormal(vector_3(q.y, q.z, q.w), vector_3(1.0 - disk_like, 1.0, 1.0 - disk_like));
 
@@ -77,7 +78,7 @@ real_type get_intersecting_line_count_real(
 int main(int argc, char** argv)
 {
 	const real_type receiver_radius = 1.0;
-	real_type emitter_radius = sqrt((1e8 * G * hbar * log(2.0)) / (k * c3 * pi));
+	real_type emitter_radius = sqrt((1e9 * G * hbar * log(2.0)) / (k * c3 * pi));
 
 	const real_type emitter_area =
 		4.0 * pi * emitter_radius * emitter_radius;
@@ -88,15 +89,17 @@ int main(int argc, char** argv)
 		(k * c3 * emitter_area)
 		/ (log(2.0) * 4.0 * G * hbar);
 
+//	cout << n << endl;
+
 	const real_type emitter_mass = c2 * emitter_radius / (2.0 * G);
 
 	const string filename = "newton.txt";
 	ofstream out_file(filename.c_str());
 	out_file << setprecision(30);
 
-	const real_type start_distance = 2.0 * receiver_radius;
+	const real_type start_distance = 10.0 * receiver_radius;
 	const real_type end_distance = 100.0 * receiver_radius;
-	const size_t distance_res = 10;
+	const size_t distance_res = 100;
 
 	const real_type distance_step_size =
 		(end_distance - start_distance)
@@ -114,21 +117,21 @@ int main(int argc, char** argv)
 		vector_3 receiver_pos_plus = receiver_pos;
 		receiver_pos_plus.x += epsilon;
 
-		const real_type collision_count_plus =
-			get_intersecting_line_count_real(
-				n,
-				receiver_pos_plus,
-				receiver_radius);
+		//const real_type collision_count_plus =
+		//	get_intersecting_line_count_real(
+		//		n,
+		//		receiver_pos_plus,
+		//		receiver_radius);
 
-		const real_type collision_count =
-			get_intersecting_line_count_real(
-				n,
-				receiver_pos,
-				receiver_radius);
+		//const real_type collision_count =
+		//	get_intersecting_line_count_real(
+		//		n,
+		//		receiver_pos,
+		//		receiver_radius);
 
-		const real_type gradient =
-			(static_cast<real_type>(collision_count_plus) - static_cast<real_type>(collision_count))
-			/ epsilon;
+		//const real_type gradient =
+		//	(static_cast<real_type>(collision_count_plus) - static_cast<real_type>(collision_count))
+		//	/ epsilon;
 
 		const real_type collision_count_plus_integer =
 			get_intersecting_line_count_integer(
@@ -146,15 +149,15 @@ int main(int argc, char** argv)
 			(static_cast<real_type>(collision_count_plus_integer) - static_cast<real_type>(collision_count_integer))
 			/ epsilon;
 
-		cout << gradient / gradient_integer << endl;
+//		cout << gradient_integer / gradient << endl;
 
 		const real_type gradient_strength =
-			-gradient
+			-gradient_integer
 			/ (receiver_radius * receiver_radius);
 
 		const real_type gradient_strength_ =
 			n
-			/ (2.0 * pow(receiver_pos.x, 3.0));
+			/ (2.0*pow(receiver_pos.x, D));
 
 		cout << gradient_strength_ / gradient_strength << endl;
 
@@ -167,7 +170,7 @@ int main(int argc, char** argv)
 
 		cout << endl;
 
-		//out_file << r << " " << gradient / gradient_integer << endl;
+		out_file << r << " " << gradient_strength_ / gradient_strength << endl;
 	}
 
 	out_file.close();

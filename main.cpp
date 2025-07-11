@@ -44,9 +44,13 @@ bool circle_intersect(
 	const vector_3 v(1, 0, 0);
 
 	const real_type d = lowest_dir.dot(v);
+
+	if (d <= 0)
+		return false;
+
 	const real_type d_ = normal.dot(v);
 
-	if (d <= 0 || d_ <= d)
+	if (d_ <= d)
 		return false;
 
 	return true;

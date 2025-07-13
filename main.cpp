@@ -38,12 +38,12 @@ bool circle_intersect(
 	const real_type circle_location, 
 	const real_type circle_radius)
 {
-	vector_3 lowest_dir(circle_location, circle_radius, 0);
-	lowest_dir.normalize();
+	vector_3 outline_dir(circle_location, circle_radius, 0);
+	outline_dir.normalize();
 
 	const vector_3 v(1, 0, 0);
 
-	const real_type d = lowest_dir.dot(v);
+	const real_type d = outline_dir.dot(v);
 
 	if (d <= 0)
 		return false;
@@ -118,7 +118,7 @@ bool circle_intersect(
 //}
 
 long long signed int get_intersecting_line_count_integer(
-	const size_t n,
+	const long long signed int n,
 	const vector_3 sphere_location,
 	const real_type sphere_radius)
 {
@@ -127,8 +127,13 @@ long long signed int get_intersecting_line_count_integer(
 
 	long long signed int count = 0;
 
-	for (size_t i = 0; i < n; i++)
+	generator.seed(0);
+
+	for (long long signed int i = 0; i < n; i++)
 	{
+		//if (i % 10000000 == 0)
+		//	cout << float(i) / float(n) << endl;
+
 		const vector_3 p = RandomUnitVector();
 		const vector_4 q = RayEllipsoid(vector_3(0, 0, 0), p, vector_3(1.0 - disk_like, 1.0, 1.0 - disk_like));
 		const vector_3 normal = EllipsoidNormal(vector_3(q.y, q.z, q.w), vector_3(1.0 - disk_like, 1.0, 1.0 - disk_like));
@@ -166,7 +171,7 @@ real_type get_intersecting_line_count_real(
 int main(int argc, char** argv)
 {
 	const real_type receiver_radius = 1.0;
-	real_type emitter_radius = sqrt((1e7 * G * hbar * log(2.0)) / (k * c3 * pi));
+	real_type emitter_radius = sqrt((10e7 * G * hbar * log(2.0)) / (k * c3 * pi));
 
 	const real_type emitter_area =
 		4.0 * pi * emitter_radius * emitter_radius;
@@ -178,14 +183,6 @@ int main(int argc, char** argv)
 		/ (log(2.0) * 4.0 * G * hbar);
 
 	const real_type emitter_mass = c2 * emitter_radius / (2.0 * G);
-
-	// 2.39545e47 is the 't Hooft-Susskind constant:
-	// the number of field lines for a black hole of
-	// unit Schwarzschild radius
-	//
-	//const real_type G_ = 
-	//	(k * c3 * pi) 
-	//	/ (log(2.0) * hbar * 2.39545e47);
 
 	const string filename = "newton.txt";
 	ofstream out_file(filename.c_str());
@@ -227,15 +224,15 @@ int main(int argc, char** argv)
 			(static_cast<real_type>(collision_count_plus) - static_cast<real_type>(collision_count))
 			/ epsilon;
 
-		const real_type collision_count_plus_integer =
+		const long long unsigned int collision_count_plus_integer =
 			get_intersecting_line_count_integer(
-				n,
+				static_cast<long long signed int>(n),
 				receiver_pos_plus,
 				receiver_radius);
 
-		const real_type collision_count_integer =
+		const long long unsigned int collision_count_integer =
 			get_intersecting_line_count_integer(
-				n,
+				static_cast<long long signed int>(n),
 				receiver_pos,
 				receiver_radius);
 

@@ -1,7 +1,16 @@
 #include "main.h"
 
+vector_3 RandomUnitVector(void)
+{
+	const real_type z = dis(generator) * 2.0 - 1.0;
+	const real_type a = dis(generator) * 2.0 * pi;
 
+	const real_type r = sqrt(1.0f - z * z);
+	const real_type x = r * cos(a);
+	const real_type y = r * sin(a);
 
+	return vector_3(x, y, z).normalize();
+}
 
 vector_4 RayEllipsoid(vector_3 ro, vector_3 rd, vector_3 r)
 {
@@ -29,9 +38,6 @@ vector_3 EllipsoidNormal(vector_3 pos, vector_3 ra)
 	return -normal;
 }
 
-
-
-
 bool circle_intersect(
 	vector_3 location, 
 	const vector_3 normal, 
@@ -41,7 +47,7 @@ bool circle_intersect(
 	vector_3 outline_dir(circle_location, circle_radius, 0);
 	outline_dir.normalize();
 
-	const vector_3 v(1, 0, 0);
+	static const vector_3 v(1, 0, 0);
 
 	const real_type d = outline_dir.dot(v);
 
@@ -55,74 +61,14 @@ bool circle_intersect(
 
 	return true;
 
-
-
-	//const vector_3 circle_origin(circle_location, 0, 0);
-
-	//if (normal.dot(circle_origin) <= 0)
-	//	return false;
-
-	//vector_3 v = location + normal;
-
-	//const real_type ratio = v.x / circle_origin.x;
-
-	//v.y = v.y / ratio;
-	//v.z = v.z / ratio;
-	//v.x = circle_origin.x;
-
-	//vector_3 v2;
-	//v2.x = circle_origin.x - v.x;
-	//v2.y = circle_origin.y - v.y;
-	//v2.z = circle_origin.z - v.z;
-
-	//if (v2.length() > circle_radius)
-	//	return false;
-
-	//return true;
 }
-
-//long long signed int get_intersecting_line_count_integer(
-//	const size_t n,
-//	const vector_3 sphere_location,
-//	const real_type sphere_radius)
-//{
-//	long long signed int count = 0;
-//
-//	for (size_t i = 0; i < n; i++)
-//	{
-//		vector_3 p = RandomUnitVector();
-//
-//		if (circle_intersect(vector_3(0, 0, 0), p, sphere_location.x, sphere_radius))
-//			count++;
-//	}
-//
-//	return count;
-//}
-
-//long long signed int get_intersecting_line_count_integer(
-//	const size_t n,
-//	const vector_3 sphere_location,
-//	const real_type sphere_radius)
-//{
-//	long long signed int count = 0;
-//
-//	for (size_t i = 0; i < n; i++)
-//	{
-//		vector_3 p = RandomUnitVector();
-//
-//		if (circle_intersect(p, p, sphere_location.x, sphere_radius))
-//			count++;
-//	}
-//
-//	return count;
-//}
 
 long long signed int get_intersecting_line_count_integer(
 	const long long signed int n,
 	const vector_3 sphere_location,
-	const real_type sphere_radius)
+	const real_type sphere_radius,
+	const real_type D)
 {
-	const real_type D = 3.0;
 	const real_type disk_like = 3.0 - D;
 
 	long long signed int count = 0;
@@ -144,8 +90,6 @@ long long signed int get_intersecting_line_count_integer(
 
 	return count;
 }
-
-
 
 real_type get_intersecting_line_count_real(
 	const real_type n,
@@ -171,7 +115,7 @@ real_type get_intersecting_line_count_real(
 int main(int argc, char** argv)
 {
 	const real_type receiver_radius = 1.0;
-	real_type emitter_radius = sqrt((10e7 * G * hbar * log(2.0)) / (k * c3 * pi));
+	real_type emitter_radius = sqrt((10e6 * G * hbar * log(2.0)) / (k * c3 * pi));
 
 	const real_type emitter_area =
 		4.0 * pi * emitter_radius * emitter_radius;
@@ -187,6 +131,10 @@ int main(int argc, char** argv)
 	const string filename = "newton.txt";
 	ofstream out_file(filename.c_str());
 	out_file << setprecision(30);
+
+
+	real_type D = 3.0;
+
 
 	const real_type start_distance = 10.0;
 	const real_type end_distance = 1000.0;
@@ -228,13 +176,15 @@ int main(int argc, char** argv)
 			get_intersecting_line_count_integer(
 				static_cast<long long signed int>(n),
 				receiver_pos_plus,
-				receiver_radius);
+				receiver_radius,
+				D);
 
 		const long long unsigned int collision_count_integer =
 			get_intersecting_line_count_integer(
 				static_cast<long long signed int>(n),
 				receiver_pos,
-				receiver_radius);
+				receiver_radius,
+				D);
 
 		const real_type gradient_integer =
 			(static_cast<real_type>(collision_count_plus_integer) - static_cast<real_type>(collision_count_integer))

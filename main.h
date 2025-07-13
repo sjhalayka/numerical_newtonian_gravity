@@ -63,17 +63,7 @@ const real_type hbar = h / (2.0 * pi);
 
 const real_type k = 1.380649e-23;
 
-vector_3 RandomUnitVector(void)
-{
-	const real_type z = dis(generator) * 2.0 - 1.0;
-	const real_type a = dis(generator) * 2.0 * pi;
 
-	const real_type r = sqrt(1.0f - z * z);
-	const real_type x = r * cos(a);
-	const real_type y = r * sin(a);
-	
-	return vector_3(x, y, z).normalize();
-}
 
 
 #endif

@@ -66,28 +66,32 @@ long long signed int get_intersecting_line_count_integer(
 	const long long signed int n,
 	const vector_3 sphere_location,
 	const real_type sphere_radius,
-	const real_type D)
+	const real_type D,
+	const long long signed int num_iterations)
 {
 	const real_type disk_like = 3.0 - D;
 
 	long long signed int count = 0;
 
-	generator.seed(0);
-
-	for (long long signed int i = 0; i < n; i++)
+	for (long long signed int i = 0; i < num_iterations; i++)
 	{
-		//if (i % 10000000 == 0)
-		//	cout << float(i) / float(n) << endl;
+		generator.seed(i);
 
-		const vector_3 p = RandomUnitVector();
-		const vector_4 q = RayEllipsoid(vector_3(0, 0, 0), p, vector_3(1.0 - disk_like, 1.0, 1.0 - disk_like));
-		const vector_3 normal = EllipsoidNormal(vector_3(q.y, q.z, q.w), vector_3(1.0 - disk_like, 1.0, 1.0 - disk_like));
+		for (long long signed int j = 0; j < n; j++)
+		{
+			//if (j % 10000000 == 0)
+			//	cout << float(j) / float(n) << endl;
 
-		if (circle_intersect(normal, sphere_location.x, sphere_radius))
-			count++;
+			const vector_3 p = RandomUnitVector();
+			const vector_4 q = RayEllipsoid(vector_3(0, 0, 0), p, vector_3(1.0 - disk_like, 1.0, 1.0 - disk_like));
+			const vector_3 normal = EllipsoidNormal(vector_3(q.y, q.z, q.w), vector_3(1.0 - disk_like, 1.0, 1.0 - disk_like));
+
+			if (circle_intersect(normal, sphere_location.x, sphere_radius))
+				count++;
+		}
 	}
 
-	return count;
+	return long long signed int(real_type(count) / real_type(num_iterations));
 }
 
 real_type get_intersecting_line_count_real(
@@ -114,7 +118,7 @@ real_type get_intersecting_line_count_real(
 int main(int argc, char** argv)
 {
 	const real_type receiver_radius = 1.0;
-	real_type emitter_radius = sqrt((10e6 * G * hbar * log(2.0)) / (k * c3 * pi));
+	real_type emitter_radius = sqrt((10e10 * G * hbar * log(2.0)) / (k * c3 * pi));
 
 	const real_type emitter_area =
 		4.0 * pi * emitter_radius * emitter_radius;
@@ -131,11 +135,9 @@ int main(int argc, char** argv)
 	ofstream out_file(filename.c_str());
 	out_file << setprecision(30);
 
-
-	real_type D = 3.0;
-
-
-	const real_type start_distance = 10.0;
+	const real_type D = 3.0;
+	
+	const real_type start_distance = 100.0;
 	const real_type end_distance = 1000.0;
 	const size_t distance_res = 10;
 		
@@ -151,6 +153,8 @@ int main(int argc, char** argv)
 		const vector_3 receiver_pos(r, 0, 0);
 
 		const real_type epsilon = 1.0;
+
+		const long long signed int num_iterations = 1;
 
 		vector_3 receiver_pos_plus = receiver_pos;
 		receiver_pos_plus.x += epsilon;
@@ -176,14 +180,16 @@ int main(int argc, char** argv)
 				static_cast<long long signed int>(n),
 				receiver_pos_plus,
 				receiver_radius,
-				D);
+				D,
+				num_iterations);
 
 		const long long unsigned int collision_count_integer =
 			get_intersecting_line_count_integer(
 				static_cast<long long signed int>(n),
 				receiver_pos,
 				receiver_radius,
-				D);
+				D,
+				num_iterations);
 
 		const real_type gradient_integer =
 			(static_cast<real_type>(collision_count_plus_integer) - static_cast<real_type>(collision_count_integer))

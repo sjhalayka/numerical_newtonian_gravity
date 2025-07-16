@@ -199,7 +199,7 @@ int main(int argc, char** argv)
 
 
 		const real_type gradient_strength =
-			-gradient
+			-gradient_integer
 			/ (receiver_radius * receiver_radius);
 
 

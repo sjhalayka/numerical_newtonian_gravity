@@ -79,8 +79,8 @@ long long signed int get_intersecting_line_count_integer(
 
 		for (long long signed int j = 0; j < n; j++)
 		{
-			//if (j % 10000000 == 0)
-			//	cout << float(j) / float(n) << endl;
+			if (j % 10000000 == 0)
+				cout << float(j) / float(n) << endl;
 
 			const vector_3 p = RandomUnitVector();
 			const vector_4 q = RayEllipsoid(vector_3(0, 0, 0), p, vector_3(1.0 - disk_like, 1.0, 1.0 - disk_like));
@@ -118,7 +118,7 @@ real_type get_intersecting_line_count_real(
 int main(int argc, char** argv)
 {
 	const real_type receiver_radius = 1.0;
-	real_type emitter_radius = sqrt((10e10 * G * hbar * log(2.0)) / (k * c3 * pi));
+	real_type emitter_radius = sqrt((10e9 * G * hbar * log(2.0)) / (k * c3 * pi));
 
 	const real_type emitter_area =
 		4.0 * pi * emitter_radius * emitter_radius;
@@ -145,10 +145,10 @@ int main(int argc, char** argv)
 		(end_distance - start_distance)
 		/ (distance_res - 1);
 
-	for (size_t step_index = 0; step_index < distance_res; step_index++)
+	//for (size_t step_index = 0; step_index < distance_res; step_index++)
 	{
-		const real_type r =
-			start_distance + step_index * distance_step_size;
+		const real_type r = 200;
+			//start_distance + step_index * distance_step_size;
 
 		const vector_3 receiver_pos(r, 0, 0);
 
@@ -195,23 +195,42 @@ int main(int argc, char** argv)
 			(static_cast<real_type>(collision_count_plus_integer) - static_cast<real_type>(collision_count_integer))
 			/ epsilon;
 
-		cout << gradient / gradient_integer << endl;
+		//cout << gradient / gradient_integer << endl;
 
 
 		const real_type gradient_strength =
 			-gradient
 			/ (receiver_radius * receiver_radius);
 
+
+
+		cout << gradient_strength << endl;
+		cout << n / (2.0 * pow(receiver_pos.x, D)) << endl;
+
+		cout << gradient_strength / (n / (2.0 * pow(receiver_pos.x, D))) << endl;
+
+
 		const real_type newton_strength =
 			G * emitter_mass / pow(receiver_pos.x, 2.0);
 
 		const real_type newton_strength_ =
 			gradient_strength * receiver_pos.x * c * hbar * log(2)
-			/ (k * 2 * pi * emitter_mass);	
+			/ (k * 2 * pi * emitter_mass);
 
-		cout << "r: " << r << " newton strength: " << newton_strength / newton_strength_ << endl;
+		const real_type newton_strength__ =
+			n * c * hbar * log(2)
+			/ (4 * k * pi * pow(receiver_pos.x, D - 1.0) * emitter_mass);
 
-		out_file << r << " " << gradient / gradient_integer << endl;
+
+
+		//cout << "r: " << r << " newton strength_: " << newton_strength / newton_strength_ << endl;
+		//cout << "r: " << r << " newton strength__: " << newton_strength / newton_strength__ << endl;
+
+
+
+
+
+		//out_file << r << " " << gradient / gradient_integer << endl;
 	}
 
 	out_file.close();

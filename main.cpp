@@ -118,7 +118,7 @@ real_type get_intersecting_line_count_real(
 int main(int argc, char** argv)
 {
 	const real_type receiver_radius = 1.0;
-	real_type emitter_radius = sqrt((10e9 * G * hbar * log(2.0)) / (k * c3 * pi));
+	real_type emitter_radius = sqrt((10e11 * G * hbar * log(2.0)) / (k * c3 * pi));
 
 	const real_type emitter_area =
 		4.0 * pi * emitter_radius * emitter_radius;
@@ -195,7 +195,7 @@ int main(int argc, char** argv)
 			(static_cast<real_type>(collision_count_plus_integer) - static_cast<real_type>(collision_count_integer))
 			/ epsilon;
 
-		//cout << gradient / gradient_integer << endl;
+		cout << gradient / gradient_integer << endl;
 
 
 		const real_type gradient_strength =

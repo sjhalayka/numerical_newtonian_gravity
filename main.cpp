@@ -39,23 +39,54 @@ vector_3 EllipsoidNormal(vector_3 pos, vector_3 ra)
 }
 
 bool circle_intersect(
+	const vector_3 location,
 	const vector_3 normal, 
 	const real_type circle_location, 
 	const real_type circle_radius)
 {
-	vector_3 outline_dir(circle_location, circle_radius, 0);
-	outline_dir.normalize();
+	//vector_3 outline_dir(circle_location, circle_radius, 0);
+	//outline_dir.normalize();
 
-	static const vector_3 v(1, 0, 0);
+	//static const vector_3 v(1, 0, 0);
 
-	const real_type d = outline_dir.dot(v);
+	//const real_type d = outline_dir.dot(v);
 
-	if (d <= 0)
+	//if (d <= 0)
+	//	return false;
+
+	//const real_type d_ = normal.dot(v);
+
+	//if (d_ <= d)
+	//	return false;
+
+	//return true;
+
+
+
+
+
+	const vector_3 circle_origin(circle_location, 0, 0);
+
+	if (normal.dot(circle_origin) <= 0)
 		return false;
 
-	const real_type d_ = normal.dot(v);
+	vector_3 v;// = location + normal;
+	v.x = location.x + normal.x;
+	v.y = location.y + normal.y;
+	v.z = location.z + normal.z;
 
-	if (d_ <= d)
+	const real_type ratio = v.x / circle_origin.x;
+
+	v.y = v.y / ratio;
+	v.z = v.z / ratio;
+	v.x = circle_origin.x;
+
+	vector_3 v2;
+	v2.x = circle_origin.x - v.x;
+	v2.y = circle_origin.y - v.y;
+	v2.z = circle_origin.z - v.z;
+
+	if (v2.length() > circle_radius)
 		return false;
 
 	return true;
@@ -86,7 +117,7 @@ long long signed int get_intersecting_line_count_integer(
 			const vector_4 q = RayEllipsoid(vector_3(0, 0, 0), p, vector_3(1.0 - disk_like, 1.0, 1.0 - disk_like));
 			const vector_3 normal = EllipsoidNormal(vector_3(q.y, q.z, q.w), vector_3(1.0 - disk_like, 1.0, 1.0 - disk_like));
 
-			if (circle_intersect(normal, sphere_location.x, sphere_radius))
+			if (circle_intersect(vector_3(0, 0, 0), normal, sphere_location.x, sphere_radius))
 				count++;
 		}
 	}
@@ -118,7 +149,7 @@ real_type get_intersecting_line_count_real(
 int main(int argc, char** argv)
 {
 	const real_type receiver_radius = 1.0;
-	real_type emitter_radius = sqrt((10e9 * G * hbar * log(2.0)) / (k * c3 * pi));
+	real_type emitter_radius = sqrt((10e8 * G * hbar * log(2.0)) / (k * c3 * pi));
 
 	const real_type emitter_area =
 		4.0 * pi * emitter_radius * emitter_radius;

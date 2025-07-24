@@ -38,6 +38,23 @@ vector_3 EllipsoidNormal(vector_3 pos, vector_3 ra)
 	return -normal;
 }
 
+vector_3 slerp(vector_3 s0, vector_3 s1, const double t)
+{
+	vector_3 s0_norm = s0;
+	s0_norm.normalize();
+
+	vector_3 s1_norm = s1;
+	s1_norm.normalize();
+
+	const double cos_angle = s0_norm.dot(s1_norm);
+	const double angle = acos(cos_angle);
+
+	const double p0_factor = sin((1 - t) * angle) / sin(angle);
+	const double p1_factor = sin(t * angle) / sin(angle);
+
+	return s0 * p0_factor + s1 * p1_factor;
+}
+
 bool circle_intersect(
 	const vector_3 location,
 	const vector_3 normal, 

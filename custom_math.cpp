@@ -128,7 +128,7 @@ custom_math::vector_3& custom_math::vector_3::normalize(void)
 {
 	real_type len = length();
 
-	if (len != 1)
+	if (len != 0)
 	{
 		x /= len;
 		y /= len;

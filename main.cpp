@@ -131,8 +131,15 @@ long long signed int get_intersecting_line_count_integer(
 				cout << float(j) / float(n) << endl;
 
 			const vector_3 p = RandomUnitVector();
-			const vector_4 q = RayEllipsoid(vector_3(0, 0, 0), p, vector_3(1.0 - disk_like, 1.0, 1.0 - disk_like));
-			const vector_3 normal = EllipsoidNormal(vector_3(q.y, q.z, q.w), vector_3(1.0 - disk_like, 1.0, 1.0 - disk_like));
+
+			vector_3 p_disk = p;
+			p_disk.y = 0;
+			p_disk.normalize();
+		
+			const vector_3 normal = slerp(p, p_disk, disk_like);
+
+			//const vector_4 q = RayEllipsoid(vector_3(0, 0, 0), p, vector_3(1.0 - disk_like, 1.0, 1.0 - disk_like));
+			//const vector_3 normal = EllipsoidNormal(vector_3(q.y, q.z, q.w), vector_3(1.0 - disk_like, 1.0, 1.0 - disk_like));
 
 			if (circle_intersect(vector_3(0, 0, 0), normal, sphere_location.x, sphere_radius))
 				count++;

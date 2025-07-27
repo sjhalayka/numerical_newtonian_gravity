@@ -123,7 +123,7 @@ long long signed int get_intersecting_line_count_integer(
 
 	for (long long signed int i = 0; i < num_iterations; i++)
 	{
-		generator.seed(i);
+		generator.seed(static_cast<unsigned>(i));
 
 		for (long long signed int j = 0; j < n; j++)
 		{
@@ -136,6 +136,9 @@ long long signed int get_intersecting_line_count_integer(
 			p_disk.y = 0;
 			p_disk.normalize();
 		
+			if (p_disk.length() == 0)
+				cout << "uh oh" << endl;
+
 			const vector_3 normal = slerp(p, p_disk, disk_like);
 
 			//const vector_4 q = RayEllipsoid(vector_3(0, 0, 0), p, vector_3(1.0 - disk_like, 1.0, 1.0 - disk_like));
@@ -173,7 +176,7 @@ real_type get_intersecting_line_count_real(
 int main(int argc, char** argv)
 {
 	const real_type receiver_radius = 1.0;
-	real_type emitter_radius = sqrt((10e8 * G * hbar * log(2.0)) / (k * c3 * pi));
+	real_type emitter_radius = sqrt((10e9 * G * hbar * log(2.0)) / (k * c3 * pi));
 
 	const real_type emitter_area =
 		4.0 * pi * emitter_radius * emitter_radius;
@@ -186,32 +189,20 @@ int main(int argc, char** argv)
 
 	const real_type emitter_mass = c2 * emitter_radius / (2.0 * G);
 
-	const string filename = "newton.txt";
-	ofstream out_file(filename.c_str());
+	ofstream out_file("newton_10e9.txt");
 	out_file << setprecision(30);
 
-	//const real_type D = 3.0;
-	//
-	//const real_type start_distance = 100.0;
-	//const real_type end_distance = 1000.0;
-	//const size_t distance_res = 10;
-	//	
-	//const real_type distance_step_size =
-	//	(end_distance - start_distance)
-	//	/ (distance_res - 1);
+	ofstream out_file2("newton__10e9.txt");
+	out_file2 << setprecision(30);
 
-	const real_type start_dim = 2.000001; // Minimum 2.000001
-	const real_type end_dim = 3.0; // Maximum 3
+	const real_type start_dim = 2.01;
+	const real_type end_dim = 3.0;
 	const size_t dim_res = 100; // Larger than 1
 	const real_type dim_step_size = (end_dim - start_dim) / (dim_res - 1);
 
 	for (real_type D = start_dim; D <= end_dim; D += dim_step_size)
-	//for (size_t step_index = 0; step_index < distance_res; step_index++)
-	{
-		const real_type r = 100;
-			//start_distance + step_index * distance_step_size;
-
-		const vector_3 receiver_pos(r, 0, 0);
+	{		
+		const vector_3 receiver_pos(100, 0, 0);
 
 		const real_type epsilon = 1.0;
 
@@ -292,6 +283,8 @@ int main(int argc, char** argv)
 
 
 		out_file << D << " " << gradient_strength << endl;
+
+		out_file2 << D << " " << (n / (2.0 * pow(receiver_pos.x, D))) << endl;
 	}
 
 	out_file.close();

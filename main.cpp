@@ -91,6 +91,7 @@ long long signed int get_intersecting_line_count_integer(
 	const real_type D)
 {
 	const real_type disk_like = 3.0 - D;
+	const real_type fractionality = 1.0 - 2.0 * (0.5 - fmod(D, 1.0));
 
 	long long signed int count = 0;
 
@@ -143,7 +144,7 @@ real_type get_intersecting_line_count_real(
 int main(int argc, char** argv)
 {
 	const real_type receiver_radius = 1.0;
-	real_type emitter_radius = sqrt((10e9 * G * hbar * log(2.0)) / (k * c3 * pi));
+	real_type emitter_radius = sqrt((10e7 * G * hbar * log(2.0)) / (k * c3 * pi));
 
 	const real_type emitter_area =
 		4.0 * pi * emitter_radius * emitter_radius;
@@ -156,10 +157,10 @@ int main(int argc, char** argv)
 
 	const real_type emitter_mass = c2 * emitter_radius / (2.0 * G);
 
-	ofstream out_file("newton_10e9.txt");
+	ofstream out_file("newton_10e7.txt");
 	out_file << setprecision(30);
 
-	ofstream out_file2("newton__10e9.txt");
+	ofstream out_file2("newton__10e7.txt");
 	out_file2 << setprecision(30);
 
 	const real_type start_dim = 2.01;

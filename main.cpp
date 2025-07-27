@@ -12,7 +12,7 @@ vector_3 RandomUnitVector(void)
 	return vector_3(x, y, z).normalize();
 }
 
-vector_3 slerp(vector_3 s0, vector_3 s1, const double t)
+vector_3 SLerp(vector_3 s0, vector_3 s1, const double t)
 {
 	vector_3 s0_norm = s0;
 	s0_norm.normalize();
@@ -20,11 +20,11 @@ vector_3 slerp(vector_3 s0, vector_3 s1, const double t)
 	vector_3 s1_norm = s1;
 	s1_norm.normalize();
 
-	const double cos_angle = s0_norm.dot(s1_norm);
-	const double angle = acos(cos_angle);
+	const real_type cos_angle = s0_norm.dot(s1_norm);
+	const real_type angle = acos(cos_angle);
 
-	const double p0_factor = sin((1 - t) * angle) / sin(angle);
-	const double p1_factor = sin(t * angle) / sin(angle);
+	const real_type p0_factor = sin((1 - t) * angle) / sin(angle);
+	const real_type p1_factor = sin(t * angle) / sin(angle);
 
 	return s0 * p0_factor + s1 * p1_factor;
 }
@@ -111,7 +111,7 @@ long long signed int get_intersecting_line_count_integer(
 		if (p_disk.length() == 0)
 			cout << "uh oh" << endl;
 
-		const vector_3 normal = slerp(p, p_disk, disk_like);
+		const vector_3 normal = SLerp(p, p_disk, disk_like);
 
 		if (circle_intersect(vector_3(0, 0, 0), normal, sphere_location.x, sphere_radius))
 			count++;
@@ -120,25 +120,6 @@ long long signed int get_intersecting_line_count_integer(
 	return count;
 }
 
-real_type get_intersecting_line_count_real(
-	const real_type n,
-	const vector_3 sphere_location,
-	const real_type sphere_radius)
-{
-	const real_type big_area =
-		4 * pi
-		* sphere_location.x * sphere_location.x;
-
-	const real_type small_area =
-		pi
-		* sphere_radius * sphere_radius;
-
-	const real_type ratio =
-		small_area
-		/ big_area;
-
-	return n * ratio;
-}
 
 
 int main(int argc, char** argv)
@@ -177,22 +158,6 @@ int main(int argc, char** argv)
 		vector_3 receiver_pos_plus = receiver_pos;
 		receiver_pos_plus.x += epsilon;
 
-		const real_type collision_count_plus =
-			get_intersecting_line_count_real(
-				n,
-				receiver_pos_plus,
-				receiver_radius);
-
-		const real_type collision_count =
-			get_intersecting_line_count_real(
-				n,
-				receiver_pos,
-				receiver_radius);
-
-		const real_type gradient =
-			(static_cast<real_type>(collision_count_plus) - static_cast<real_type>(collision_count))
-			/ epsilon;
-
 		const long long unsigned int collision_count_plus_integer =
 			get_intersecting_line_count_integer(
 				static_cast<long long signed int>(n),
@@ -211,12 +176,15 @@ int main(int argc, char** argv)
 			(static_cast<real_type>(collision_count_plus_integer) - static_cast<real_type>(collision_count_integer))
 			/ epsilon;
 
-		cout << gradient / gradient_integer << endl;
 
-
-		const real_type gradient_strength =
+		real_type gradient_strength =
 			-gradient_integer
 			/ (receiver_radius * receiver_radius);
+
+
+		const real_type fractionality = 1.0 - 2.0 * (0.5 - fmod(D, 1.0));
+		gradient_strength = pow(gradient_strength, 1 + fractionality);
+
 
 
 

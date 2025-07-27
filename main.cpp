@@ -12,32 +12,6 @@ vector_3 RandomUnitVector(void)
 	return vector_3(x, y, z).normalize();
 }
 
-vector_4 RayEllipsoid(vector_3 ro, vector_3 rd, vector_3 r)
-{
-	vector_3 r2 = r * r;
-	real_type a = rd.dot(rd / r2);
-	real_type b = ro.dot(rd / r2);
-	real_type c = ro.dot(ro / r2);
-	real_type h = b * b - a * (c - 1.0);
-
-	if (h < 0.0)
-		return vector_4(-1, 0, 0, 0);
-
-	real_type t = (-b - sqrt(h)) / a;
-
-	vector_3 pos = ro + rd * t;
-
-	return vector_4(t, pos.x, pos.y, pos.z);
-}
-
-vector_3 EllipsoidNormal(vector_3 pos, vector_3 ra)
-{
-	vector_3 normal = (pos / (ra * ra));
-	normal.normalize();
-
-	return -normal;
-}
-
 vector_3 slerp(vector_3 s0, vector_3 s1, const double t)
 {
 	vector_3 s0_norm = s0;
@@ -87,7 +61,7 @@ bool circle_intersect(
 	if (normal.dot(circle_origin) <= 0)
 		return false;
 
-	vector_3 v;// = location + normal;
+	vector_3 v;
 	v.x = location.x + normal.x;
 	v.y = location.y + normal.y;
 	v.z = location.z + normal.z;
@@ -114,42 +88,35 @@ long long signed int get_intersecting_line_count_integer(
 	const long long signed int n,
 	const vector_3 sphere_location,
 	const real_type sphere_radius,
-	const real_type D,
-	const long long signed int num_iterations)
+	const real_type D)
 {
 	const real_type disk_like = 3.0 - D;
 
 	long long signed int count = 0;
 
-	for (long long signed int i = 0; i < num_iterations; i++)
+	generator.seed(static_cast<unsigned>(0));
+
+	for (long long signed int j = 0; j < n; j++)
 	{
-		generator.seed(static_cast<unsigned>(i));
+		if (j % 10000000 == 0)
+			cout << float(j) / float(n) << endl;
 
-		for (long long signed int j = 0; j < n; j++)
-		{
-			if (j % 10000000 == 0)
-				cout << float(j) / float(n) << endl;
+		const vector_3 p = RandomUnitVector();
 
-			const vector_3 p = RandomUnitVector();
+		vector_3 p_disk = p;
+		p_disk.y = 0;
+		p_disk.normalize();
 
-			vector_3 p_disk = p;
-			p_disk.y = 0;
-			p_disk.normalize();
-		
-			if (p_disk.length() == 0)
-				cout << "uh oh" << endl;
+		if (p_disk.length() == 0)
+			cout << "uh oh" << endl;
 
-			const vector_3 normal = slerp(p, p_disk, disk_like);
+		const vector_3 normal = slerp(p, p_disk, disk_like);
 
-			//const vector_4 q = RayEllipsoid(vector_3(0, 0, 0), p, vector_3(1.0 - disk_like, 1.0, 1.0 - disk_like));
-			//const vector_3 normal = EllipsoidNormal(vector_3(q.y, q.z, q.w), vector_3(1.0 - disk_like, 1.0, 1.0 - disk_like));
-
-			if (circle_intersect(vector_3(0, 0, 0), normal, sphere_location.x, sphere_radius))
-				count++;
-		}
+		if (circle_intersect(vector_3(0, 0, 0), normal, sphere_location.x, sphere_radius))
+			count++;
 	}
 
-	return long long signed int(real_type(count) / real_type(num_iterations));
+	return count;
 }
 
 real_type get_intersecting_line_count_real(
@@ -201,12 +168,10 @@ int main(int argc, char** argv)
 	const real_type dim_step_size = (end_dim - start_dim) / (dim_res - 1);
 
 	for (real_type D = start_dim; D <= end_dim; D += dim_step_size)
-	{		
+	{
 		const vector_3 receiver_pos(100, 0, 0);
 
 		const real_type epsilon = 1.0;
-
-		const long long signed int num_iterations = 1;
 
 		vector_3 receiver_pos_plus = receiver_pos;
 		receiver_pos_plus.x += epsilon;
@@ -232,16 +197,14 @@ int main(int argc, char** argv)
 				static_cast<long long signed int>(n),
 				receiver_pos_plus,
 				receiver_radius,
-				D,
-				num_iterations);
+				D);
 
 		const long long unsigned int collision_count_integer =
 			get_intersecting_line_count_integer(
 				static_cast<long long signed int>(n),
 				receiver_pos,
 				receiver_radius,
-				D,
-				num_iterations);
+				D);
 
 		const real_type gradient_integer =
 			(static_cast<real_type>(collision_count_plus_integer) - static_cast<real_type>(collision_count_integer))

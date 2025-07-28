@@ -183,7 +183,7 @@ int main(int argc, char** argv)
 
 
 		const real_type fractionality = 1.0 - 2.0 * (0.5 - fmod(D, 1.0));
-		gradient_strength = pow(gradient_strength, 1 + fractionality);
+		//gradient_strength = pow(gradient_strength, 1.0/(1 + fractionality));
 
 
 

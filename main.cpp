@@ -12,7 +12,7 @@ vector_3 RandomUnitVector(void)
 	return vector_3(x, y, z).normalize();
 }
 
-vector_3 SLerp(vector_3 s0, vector_3 s1, const double t)
+vector_3 SLerp(vector_3 s0, vector_3 s1, const real_type t)
 {
 	vector_3 s0_norm = s0;
 	s0_norm.normalize();
@@ -28,6 +28,12 @@ vector_3 SLerp(vector_3 s0, vector_3 s1, const double t)
 
 	return s0 * p0_factor + s1 * p1_factor;
 }
+
+//real_type lerp(real_type a, real_type b, real_type t)
+//{
+//	return a + t * (b - a);
+//}
+
 
 bool circle_intersect(
 	const vector_3 location,
@@ -125,7 +131,7 @@ long long signed int get_intersecting_line_count_integer(
 int main(int argc, char** argv)
 {
 	const real_type receiver_radius = 1.0;
-	real_type emitter_radius = sqrt((10e7 * G * hbar * log(2.0)) / (k * c3 * pi));
+	real_type emitter_radius = sqrt((10e8 * G * hbar * log(2.0)) / (k * c3 * pi));
 
 	const real_type emitter_area =
 		4.0 * pi * emitter_radius * emitter_radius;
@@ -138,10 +144,10 @@ int main(int argc, char** argv)
 
 	const real_type emitter_mass = c2 * emitter_radius / (2.0 * G);
 
-	ofstream out_file("newton_10e7.txt");
+	ofstream out_file("newton_10e8.txt");
 	out_file << setprecision(30);
 
-	ofstream out_file2("newton__10e7.txt");
+	ofstream out_file2("newton__10e8.txt");
 	out_file2 << setprecision(30);
 
 	const real_type start_dim = 2.01;
@@ -182,7 +188,22 @@ int main(int argc, char** argv)
 			/ (receiver_radius * receiver_radius);
 
 
-		const real_type fractionality = 1.0 - 2.0 * (0.5 - fmod(D, 1.0));
+
+
+
+		//const real_type D2 = n / (2.0 * pow(receiver_pos.x, 2.0));
+		//const real_type D3 = n / (2.0 * pow(receiver_pos.x, 3.0));
+		//const real_type gap = D2 - D3;
+
+		//gradient_strength -= D3;
+		//gradient_strength /= gap;
+
+		////gradient_strength = pow(gradient_strength, 0.125);
+
+		//gradient_strength *= gap;
+		//gradient_strength += D3;
+
+		//const real_type fractionality = 1.0 - 2.0 * (0.5 - fmod(D, 1.0));
 		//gradient_strength = pow(gradient_strength, 1.0/(1 + fractionality));
 
 
@@ -194,16 +215,16 @@ int main(int argc, char** argv)
 		cout << gradient_strength / (n / (2.0 * pow(receiver_pos.x, D))) << endl;
 
 
-		const real_type newton_strength =
-			G * emitter_mass / pow(receiver_pos.x, 2.0);
+		//const real_type newton_strength =
+		//	G * emitter_mass / pow(receiver_pos.x, 2.0);
 
-		const real_type newton_strength_ =
-			gradient_strength * receiver_pos.x * c * hbar * log(2)
-			/ (k * 2 * pi * emitter_mass);
+		//const real_type newton_strength_ =
+		//	gradient_strength * receiver_pos.x * c * hbar * log(2)
+		//	/ (k * 2 * pi * emitter_mass);
 
-		const real_type newton_strength__ =
-			n * c * hbar * log(2)
-			/ (4 * k * pi * pow(receiver_pos.x, D - 1.0) * emitter_mass);
+		//const real_type newton_strength__ =
+		//	n * c * hbar * log(2)
+		//	/ (4 * k * pi * pow(receiver_pos.x, D - 1.0) * emitter_mass);
 
 
 

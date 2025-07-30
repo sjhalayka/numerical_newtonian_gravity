@@ -47,7 +47,7 @@ using std::thread;
 
 #include <random>
 std::mt19937 generator(0);
-std::uniform_real_distribution<long double> dis(0.0, 1.0);
+std::uniform_real_distribution<real_type> dis(0.0, 1.0);
 
 
 const real_type pi = 4.0 * atan(1.0);

@@ -97,7 +97,7 @@ long long signed int get_intersecting_line_count_integer(
 	const real_type D)
 {
 	const real_type disk_like = 3.0 - D;
-	const real_type fractionality = 1.0 - 2.0 * (0.5 - fmod(D, 1.0));
+	//const real_type fractionality = 1.0 - 2.0 * (0.5 - fmod(D, 1.0));
 
 	long long signed int count = 0;
 

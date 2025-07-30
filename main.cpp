@@ -188,7 +188,7 @@ int main(int argc, char** argv)
 			/ (receiver_radius * receiver_radius);
 
 
-		const real_type D2_5 = n / (2.0 * pow(receiver_pos.x, 2.5));
+		//const real_type D2_5 = n / (2.0 * pow(receiver_pos.x, 2.5));
 		//const real_type D2 = n / (2.0 * pow(receiver_pos.x, 2.0));
 		//const real_type D3 = n / (2.0 * pow(receiver_pos.x, 3.0));
 		//const real_type gap = D2 - D3;
@@ -204,8 +204,8 @@ int main(int argc, char** argv)
 
 
 
-		const real_type fractionality = 1.0 - 2.0 * (0.5 - fmod(D, 1.0));
-		gradient_strength = fractionality*D2_5;//pow(gradient_strength, ));
+		//const real_type fractionality = 1.0 - 2.0 * (0.5 - fmod(D, 1.0));
+		//gradient_strength = fractionality*D2_5;//pow(gradient_strength, ));
 
 		//if(fractionality != 0)
 		//gradient_strength /= ( 1 - fractionality)	 * 0.46;

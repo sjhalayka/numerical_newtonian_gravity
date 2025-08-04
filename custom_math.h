@@ -2,28 +2,6 @@
 #define custom_math_h
 
 
-//#include <boost/multiprecision/cpp_bin_float.hpp>
-//using namespace boost::multiprecision;
-//using cpp_bin_float_100_ = number<backends::cpp_bin_float<1024, backends::digit_base_10, void, std::int16_t, -1022, 1023>, et_off >;
-//typedef cpp_bin_float_100_ real_type;
-//typedef long double real_type;
-//typedef number<backends::cpp_bin_float<237, backends::digit_base_2, void, std::int32_t, -262142, 262143>, et_off>  cpp_bin_float_oct;
-//typedef cpp_bin_float_oct real_type;
-
-
-
-//#include <boost/multiprecision/cpp_bin_float.hpp>
-//using namespace boost::multiprecision;
-//using cpp_bin_float_100_ = number<backends::cpp_bin_float<1024, backends::digit_base_10, void, std::int16_t, -1022, 1023>, et_off >;
-//typedef cpp_bin_float_100_ real_type;
-//typedef long double real_type;
-
-
-
-//typedef number<backends::cpp_bin_float<237, backends::digit_base_2, void, std::int32_t, -262142, 262143>, et_off>  cpp_bin_float_oct;
-//typedef cpp_bin_float_oct real_type;
-
-
 
 typedef long double real_type;
 

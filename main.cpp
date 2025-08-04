@@ -1,5 +1,6 @@
 #include "main.h"
 
+
 vector_3 RandomUnitVector(void)
 {
 	const real_type z = dis(generator) * 2.0 - 1.0;
@@ -29,11 +30,6 @@ vector_3 SLerp(vector_3 s0, vector_3 s1, const real_type t)
 	return s0 * p0_factor + s1 * p1_factor;
 }
 
-//real_type lerp(real_type a, real_type b, real_type t)
-//{
-//	return a + t * (b - a);
-//}
-
 
 bool circle_intersect(
 	const vector_3 location,
@@ -41,52 +37,49 @@ bool circle_intersect(
 	const real_type circle_location, 
 	const real_type circle_radius)
 {
-	//vector_3 outline_dir(circle_location, circle_radius, 0);
-	//outline_dir.normalize();
+	vector_3 outline_dir(circle_location, circle_radius, 0);
+	outline_dir.normalize();
 
-	//static const vector_3 v(1, 0, 0);
+	static const vector_3 v(1, 0, 0);
 
-	//const real_type d = outline_dir.dot(v);
+	const real_type d = outline_dir.dot(v);
 
-	//if (d <= 0)
-	//	return false;
-
-	//const real_type d_ = normal.dot(v);
-
-	//if (d_ <= d)
-	//	return false;
-
-	//return true;
-
-
-
-
-
-	const vector_3 circle_origin(circle_location, 0, 0);
-
-	if (normal.dot(circle_origin) <= 0)
+	if (d <= 0)
 		return false;
 
-	vector_3 v;
-	v.x = location.x + normal.x;
-	v.y = location.y + normal.y;
-	v.z = location.z + normal.z;
+	const real_type d_ = normal.dot(v);
 
-	const real_type ratio = v.x / circle_origin.x;
-
-	v.y = v.y / ratio;
-	v.z = v.z / ratio;
-	v.x = circle_origin.x;
-
-	vector_3 v2;
-	v2.x = circle_origin.x - v.x;
-	v2.y = circle_origin.y - v.y;
-	v2.z = circle_origin.z - v.z;
-
-	if (v2.length() > circle_radius)
+	if (d_ <= d)
 		return false;
 
 	return true;
+
+
+	//const vector_3 circle_origin(circle_location, 0, 0);
+
+	//if (normal.dot(circle_origin) <= 0)
+	//	return false;
+
+	//vector_3 v;
+	//v.x = location.x + normal.x;
+	//v.y = location.y + normal.y;
+	//v.z = location.z + normal.z;
+
+	//const real_type ratio = v.x / circle_origin.x;
+
+	//v.y = v.y / ratio;
+	//v.z = v.z / ratio;
+	//v.x = circle_origin.x;	
+
+	//vector_3 v2;
+	//v2.x = circle_origin.x - v.x;
+	//v2.y = circle_origin.y - v.y;
+	//v2.z = circle_origin.z - v.z;
+
+	//if (v2.length() > circle_radius)
+	//	return false;
+
+	//return true;
 
 }
 
@@ -150,9 +143,9 @@ int main(int argc, char** argv)
 	ofstream out_file2("newton__10e8.txt");
 	out_file2 << setprecision(30);
 
-	const real_type start_dim = 2.01;
+	const real_type start_dim = 2.001;
 	const real_type end_dim = 3.0;
-	const size_t dim_res = 100; // Larger than 1
+	const size_t dim_res = 1000; // Larger than 1
 	const real_type dim_step_size = (end_dim - start_dim) / (dim_res - 1);
 
 	for (real_type D = start_dim; D <= end_dim; D += dim_step_size)
@@ -188,33 +181,15 @@ int main(int argc, char** argv)
 			/ (receiver_radius * receiver_radius);
 
 
-		//const real_type D2_5 = n / (2.0 * pow(receiver_pos.x, 2.5));
-		//const real_type D2 = n / (2.0 * pow(receiver_pos.x, 2.0));
-		//const real_type D3 = n / (2.0 * pow(receiver_pos.x, 3.0));
-		//const real_type gap = D2 - D3;
 
-		//gradient_strength -= D3;
-		//gradient_strength /= gap;
-
-		//gradient_strength = pow(gradient_strength, 1.0/1024.0);
-
-		//gradient_strength *= gap;
-		//gradient_strength += D3;
-
-
-
-
-		//const real_type fractionality = 1.0 - 2.0 * (0.5 - fmod(D, 1.0));
-		//gradient_strength = fractionality*D2_5;//pow(gradient_strength, ));
-
-		//if(fractionality != 0)
-		//gradient_strength /= ( 1 - fractionality)	 * 0.46;
-
+		real_type x = n / (2.0 * pow(receiver_pos.x, D));
 
 		cout << gradient_strength << endl;
-		cout << n / (2.0 * pow(receiver_pos.x, D)) << endl;
+		cout << x << endl;
 
-		cout << gradient_strength / (n / (2.0 * pow(receiver_pos.x, D))) << endl;
+		cout << gradient_strength / x << endl;
+
+
 
 
 		//const real_type newton_strength =
@@ -228,8 +203,6 @@ int main(int argc, char** argv)
 		//	n * c * hbar * log(2)
 		//	/ (4 * k * pi * pow(receiver_pos.x, D - 1.0) * emitter_mass);
 
-
-
 		//cout << "r: " << r << " newton strength_: " << newton_strength / newton_strength_ << endl;
 		//cout << "r: " << r << " newton strength__: " << newton_strength / newton_strength__ << endl;
 
@@ -239,7 +212,7 @@ int main(int argc, char** argv)
 
 		out_file << D << " " << gradient_strength << endl;
 
-		out_file2 << D << " " << (n / (2.0 * pow(receiver_pos.x, D))) << endl;
+		out_file2 << D << " " << x << endl;
 	}
 
 	out_file.close();

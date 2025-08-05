@@ -137,10 +137,10 @@ int main(int argc, char** argv)
 
 	const real_type emitter_mass = c2 * emitter_radius / (2.0 * G);
 
-	ofstream out_file("newton_10e8.txt");
+	ofstream out_file("newton_10e8_200.txt");
 	out_file << setprecision(30);
 
-	ofstream out_file2("newton__10e8.txt");
+	ofstream out_file2("newton__10e8_200.txt");
 	out_file2 << setprecision(30);
 
 	const real_type start_dim = 2.001;
@@ -150,7 +150,7 @@ int main(int argc, char** argv)
 
 	for (real_type D = start_dim; D <= end_dim; D += dim_step_size)
 	{
-		const vector_3 receiver_pos(100, 0, 0);
+		const vector_3 receiver_pos(200, 0, 0);
 
 		const real_type epsilon = 1.0;
 

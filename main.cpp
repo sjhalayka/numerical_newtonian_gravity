@@ -55,31 +55,6 @@ bool circle_intersect(
 	return true;
 
 
-	//const vector_3 circle_origin(circle_location, 0, 0);
-
-	//if (normal.dot(circle_origin) <= 0)
-	//	return false;
-
-	//vector_3 v;
-	//v.x = location.x + normal.x;
-	//v.y = location.y + normal.y;
-	//v.z = location.z + normal.z;
-
-	//const real_type ratio = v.x / circle_origin.x;
-
-	//v.y = v.y / ratio;
-	//v.z = v.z / ratio;
-	//v.x = circle_origin.x;	
-
-	//vector_3 v2;
-	//v2.x = circle_origin.x - v.x;
-	//v2.y = circle_origin.y - v.y;
-	//v2.z = circle_origin.z - v.z;
-
-	//if (v2.length() > circle_radius)
-	//	return false;
-
-	//return true;
 
 }
 
@@ -137,10 +112,10 @@ int main(int argc, char** argv)
 
 	const real_type emitter_mass = c2 * emitter_radius / (2.0 * G);
 
-	ofstream out_file("newton_10e8_200.txt");
+	ofstream out_file("numerical");
 	out_file << setprecision(30);
 
-	ofstream out_file2("newton__10e8_200.txt");
+	ofstream out_file2("analytical");
 	out_file2 << setprecision(30);
 
 	const real_type start_dim = 2.001;

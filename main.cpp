@@ -185,8 +185,6 @@ int main(int argc, char** argv)
 		out_file2 << D << " " << x << endl;
 	}
 
-	out_file.close();
-
 	return 0;
 }
 

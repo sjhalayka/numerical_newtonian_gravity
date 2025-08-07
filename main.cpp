@@ -30,7 +30,6 @@ vector_3 SLerp(vector_3 s0, vector_3 s1, const real_type t)
 	return s0 * p0_factor + s1 * p1_factor;
 }
 
-
 bool circle_intersect(
 	const vector_3 location,
 	const vector_3 normal, 
@@ -53,9 +52,6 @@ bool circle_intersect(
 		return false;
 
 	return true;
-
-
-
 }
 
 long long signed int get_intersecting_line_count_integer(
@@ -93,7 +89,6 @@ long long signed int get_intersecting_line_count_integer(
 
 	return count;
 }
-
 
 
 int main(int argc, char** argv)

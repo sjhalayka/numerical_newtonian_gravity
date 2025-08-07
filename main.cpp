@@ -120,7 +120,7 @@ int main(int argc, char** argv)
 
 	for (real_type D = start_dim; D <= end_dim; D += dim_step_size)
 	{
-		const vector_3 receiver_pos(200, 0, 0);
+		const vector_3 receiver_pos(100, 0, 0);
 
 		const real_type epsilon = 1.0;
 

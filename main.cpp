@@ -102,7 +102,7 @@ real_type lerp(real_type a, real_type b, real_type t)
 int main(int argc, char** argv)
 {
 	const real_type receiver_radius = 1.0;
-	real_type emitter_radius = sqrt((10e8 * G * hbar * log(2.0)) / (k * c3 * pi));
+	real_type emitter_radius = sqrt((10e9 * G * hbar * log(2.0)) / (k * c3 * pi));
 
 	const real_type emitter_area =
 		4.0 * pi * emitter_radius * emitter_radius;
@@ -121,7 +121,7 @@ int main(int argc, char** argv)
 	ofstream out_file2("analytical");
 	out_file2 << setprecision(30);
 
-	const real_type start_dim = 2.0;
+	const real_type start_dim = 3.0;
 	const real_type end_dim = 3.0;
 	const size_t dim_res = 1000; // Larger than 1
 	const real_type dim_step_size = (end_dim - start_dim) / (dim_res - 1);
@@ -217,15 +217,15 @@ int main(int argc, char** argv)
 		//cout << D << " " << targetD << endl;
 
 		// Newtonian acceleration is proportional to gradient_strength
-		const real_type newton_strength_ =
-			gradient_strength * receiver_pos.x * c * hbar * log(2)
-			/ (k * 2 * pi * emitter_mass);
+		//const real_type newton_strength_ =
+		//	gradient_strength * receiver_pos.x * c * hbar * log(2)
+		//	/ (k * 2 * pi * emitter_mass);
 		// ... therefore, the ratio of a_flat/a_Newton is equal to the
 		// the ratio of sampled gradient strength / gradient_strength for D = 3
 
 		real_type D3_gradient_strength = newton_strength * k * 2 * pi * emitter_mass / (receiver_pos.x * c * hbar * log(2));
 
-		gradient_strength = newton_strength_ * k * 2 * pi * emitter_mass / (receiver_pos.x * c * hbar * log(2));
+		//gradient_strength = newton_strength_ * k * 2 * pi * emitter_mass / (receiver_pos.x * c * hbar * log(2));
 
 		cout << gradient_strength << endl;
 		cout << D3_gradient_strength << endl;
@@ -237,6 +237,10 @@ int main(int argc, char** argv)
 
 		//cout << "r: " << r << " newton strength_: " << newton_strength / newton_strength_ << endl;
 		//cout << "r: " << r << " newton strength__: " << newton_strength / newton_strength__ << endl;
+
+
+		break;
+
 
 
 

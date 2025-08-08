@@ -162,10 +162,10 @@ int main(int argc, char** argv)
 
 		real_type x = n / (2.0 * pow(receiver_pos.x, D));
 
-		cout << gradient_strength << endl;
-		cout << x << endl;
+		//cout << gradient_strength << endl;
+		//cout << x << endl;
 
-		cout << gradient_strength / x << endl;
+		//cout << gradient_strength / x << endl;
 
 
 		real_type v_flat = 220000;
@@ -176,25 +176,30 @@ int main(int argc, char** argv)
 				(n * G * c * hbar * log(2.0)) /
 				(4 * k * pi * pow(receiver_pos.x, 4.0)));
 
+		// = G * emitter_mass / pow(receiver_pos.x, 2.0);
+
+
+
+
 		real_type v_Newton = sqrt(a_Newton * receiver_pos.x);
 
-		real_type pow_exponent = D - 1.0;
+		//real_type pow_exponent = D - 1.0;
 
 		//const real_type disk_like = 3.0 - D;
 		//pow_exponent = lerp(D - 1.0, D - 1.0, disk_like);
 //		pow_exponent = lerp(D - 1.0, D, disk_like);
 
 
-			real_type a_flat_ =
-			n * c * hbar * log(2.0) /
-			(4 * k * pi * pow(receiver_pos.x, pow_exponent) * emitter_mass);
+			//real_type a_flat_ =
+			//n * c * hbar * log(2.0) /
+			//(4 * k * pi * pow(receiver_pos.x, pow_exponent) * emitter_mass);
 
 		
 
 
-		cout << a_flat << endl;
-		cout << a_flat_ << endl;
-		cout << a_Newton << endl;
+		//cout << a_flat << endl;
+		//cout << a_flat_ << endl;
+		//cout << a_Newton << endl;
 
 
 
@@ -213,16 +218,18 @@ int main(int argc, char** argv)
 
 		// Newtonian acceleration is proportional to gradient_strength
 		const real_type newton_strength_ =
-
 			gradient_strength * receiver_pos.x * c * hbar * log(2)
 			/ (k * 2 * pi * emitter_mass);
-
-		real_type D3_grad_stren = newton_strength * k * 2 * pi * emitter_mass / (receiver_pos.x * c * hbar * log(2));
-
-
-
 		// ... therefore, the ratio of a_flat/a_Newton is equal to the
 		// the ratio of sampled gradient strength / gradient_strength for D = 3
+
+		real_type D3_gradient_strength = newton_strength * k * 2 * pi * emitter_mass / (receiver_pos.x * c * hbar * log(2));
+
+		gradient_strength = newton_strength_ * k * 2 * pi * emitter_mass / (receiver_pos.x * c * hbar * log(2));
+
+		cout << gradient_strength << endl;
+		cout << D3_gradient_strength << endl;
+
 
 		//const real_type newton_strength__ =
 		//	n * c * hbar * log(2)

@@ -30,8 +30,12 @@ vector_3 SLerp(vector_3 s0, vector_3 s1, const real_type t)
 	return s0 * p0_factor + s1 * p1_factor;
 }
 
+real_type Lerp(real_type a, real_type b, real_type t)
+{
+	return a + t * (b - a);
+}
+
 bool circle_intersect(
-	const vector_3 location,
 	const vector_3 normal, 
 	const real_type circle_location, 
 	const real_type circle_radius)
@@ -83,13 +87,17 @@ long long signed int get_intersecting_line_count_integer(
 
 		const vector_3 normal = SLerp(p, p_disk, disk_like);
 
-		if (circle_intersect(vector_3(0, 0, 0), normal, sphere_location.x, sphere_radius))
+		if (circle_intersect(normal, sphere_location.x, sphere_radius))
 			count++;
 	}
 
 	return count;
 }
 
+real_type lerp(real_type a, real_type b, real_type t)
+{
+	return a + t * (b - a);
+}
 
 int main(int argc, char** argv)
 {
@@ -113,7 +121,7 @@ int main(int argc, char** argv)
 	ofstream out_file2("analytical");
 	out_file2 << setprecision(30);
 
-	const real_type start_dim = 2.001;
+	const real_type start_dim = 2.0;
 	const real_type end_dim = 3.0;
 	const size_t dim_res = 1000; // Larger than 1
 	const real_type dim_step_size = (end_dim - start_dim) / (dim_res - 1);
@@ -160,10 +168,48 @@ int main(int argc, char** argv)
 		cout << gradient_strength / x << endl;
 
 
+		real_type v_flat = 220000;
+		real_type a_flat = pow(v_flat, 2.0) / receiver_pos.x;
+
+		real_type a_Newton =
+			sqrt(
+				(n * G * c * hbar * log(2.0)) /
+				(4 * k * pi * pow(receiver_pos.x, 4.0)));
+
+		real_type v_Newton = sqrt(a_Newton * receiver_pos.x);
+
+		real_type pow_exponent = D - 1.0;
+
+		//const real_type disk_like = 3.0 - D;
+		//pow_exponent = lerp(D - 1.0, D - 1.0, disk_like);
+//		pow_exponent = lerp(D - 1.0, D, disk_like);
+
+
+			real_type a_flat_ =
+			n * c * hbar * log(2.0) /
+			(4 * k * pi * pow(receiver_pos.x, pow_exponent) * emitter_mass);
+
+		
+
+
+		cout << a_flat << endl;
+		cout << a_flat_ << endl;
+		cout << a_Newton << endl;
+
 
 
 		//const real_type newton_strength =
 		//	G * emitter_mass / pow(receiver_pos.x, 2.0);
+
+
+		//double v_Newton = sqrt(a_Newton * receiver_pos.x);
+		//double v_flat = 220000;
+
+		//double targetD = 3.0 -
+		//	log(v_flat * v_flat / (v_Newton * v_Newton)) /
+		//	log(receiver_pos.x);
+
+		//cout << D << " " << targetD << endl;
 
 		//const real_type newton_strength_ =
 		//	gradient_strength * receiver_pos.x * c * hbar * log(2)

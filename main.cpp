@@ -198,8 +198,8 @@ int main(int argc, char** argv)
 
 
 
-		//const real_type newton_strength =
-		//	G * emitter_mass / pow(receiver_pos.x, 2.0);
+		const real_type newton_strength =
+			G * emitter_mass / pow(receiver_pos.x, 2.0);
 
 
 		//double v_Newton = sqrt(a_Newton * receiver_pos.x);
@@ -211,9 +211,18 @@ int main(int argc, char** argv)
 
 		//cout << D << " " << targetD << endl;
 
-		//const real_type newton_strength_ =
-		//	gradient_strength * receiver_pos.x * c * hbar * log(2)
-		//	/ (k * 2 * pi * emitter_mass);
+		// Newtonian acceleration is proportional to gradient_strength
+		const real_type newton_strength_ =
+
+			gradient_strength * receiver_pos.x * c * hbar * log(2)
+			/ (k * 2 * pi * emitter_mass);
+
+		real_type D3_grad_stren = newton_strength * k * 2 * pi * emitter_mass / (receiver_pos.x * c * hbar * log(2));
+
+
+
+		// ... therefore, the ratio of a_flat/a_Newton is equal to the
+		// the ratio of sampled gradient strength / gradient_strength for D = 3
 
 		//const real_type newton_strength__ =
 		//	n * c * hbar * log(2)

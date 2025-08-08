@@ -121,7 +121,7 @@ int main(int argc, char** argv)
 	ofstream out_file2("analytical");
 	out_file2 << setprecision(30);
 
-	const real_type start_dim = 3.0;
+	const real_type start_dim = 2.0;
 	const real_type end_dim = 3.0;
 	const size_t dim_res = 1000; // Larger than 1
 	const real_type dim_step_size = (end_dim - start_dim) / (dim_res - 1);
@@ -239,7 +239,7 @@ int main(int argc, char** argv)
 		//cout << "r: " << r << " newton strength__: " << newton_strength / newton_strength__ << endl;
 
 
-		break;
+		//break;
 
 
 

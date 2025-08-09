@@ -190,10 +190,10 @@ int main(int argc, char** argv)
 
 		real_type D3_gradient_strength = a_Newton * k * 2 * pi * emitter_mass / (receiver_pos.x * c * hbar * log(2));
 
-		//gradient_strength = newton_strength_ * k * 2 * pi * emitter_mass / (receiver_pos.x * c * hbar * log(2));
-
 		cout << gradient_strength << endl;
 		cout << D3_gradient_strength << endl;
+
+		cout << gradient_strength / D3_gradient_strength << endl;
 		//break;
 
 

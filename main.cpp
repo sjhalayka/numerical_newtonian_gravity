@@ -102,7 +102,7 @@ real_type lerp(real_type a, real_type b, real_type t)
 int main(int argc, char** argv)
 {
 	const real_type receiver_radius = 1.0;
-	real_type emitter_radius = sqrt((10e8 * G * hbar * log(2.0)) / (k * c3 * pi));
+	real_type emitter_radius = sqrt((10e7 * G * hbar * log(2.0)) / (k * c3 * pi));
 
 	const real_type emitter_area =
 		4.0 * pi * emitter_radius * emitter_radius;
@@ -171,15 +171,52 @@ int main(int argc, char** argv)
 		real_type v_flat = 220000;
 		real_type a_flat = pow(v_flat, 2.0) / receiver_pos.x;
 
-		real_type a_Newton =
-			sqrt(
-				(n * G * c * hbar * log(2.0)) /
-				(4 * k * pi * pow(receiver_pos.x, 4.0)));
+		//real_type a_Newton =
+		//	sqrt(
+		//		(n * G * c * hbar * log(2.0)) /
+		//		(4 * k * pi * pow(receiver_pos.x, 4.0)));
 
 		//// = G * emitter_mass / pow(receiver_pos.x, 2.0);
 
+
+
+
 		//real_type v_Newton = sqrt(a_Newton * receiver_pos.x);
 
+		//real_type pow_exponent = D - 1.0;
+
+		//const real_type disk_like = 3.0 - D;
+		//pow_exponent = lerp(D - 1.0, D - 1.0, disk_like);
+//		pow_exponent = lerp(D - 1.0, D, disk_like);
+
+
+			//real_type a_flat_ =
+			//n * c * hbar * log(2.0) /
+			//(4 * k * pi * pow(receiver_pos.x, pow_exponent) * emitter_mass);
+
+		
+
+
+		//cout << a_flat << endl;
+		//cout << a_flat_ << endl;
+		//cout << a_Newton << endl;
+
+
+
+		const real_type newton_strength =
+			G * emitter_mass / pow(receiver_pos.x, 2.0);
+
+//		cout << a_Newton << " " << newton_strength << endl;
+
+
+		//double v_Newton = sqrt(a_Newton * receiver_pos.x);
+		//double v_flat = 220000;
+
+		//double targetD = 3.0 -
+		//	log(v_flat * v_flat / (v_Newton * v_Newton)) /
+		//	log(receiver_pos.x);
+
+		//cout << D << " " << targetD << endl;
 
 		// Newtonian acceleration is proportional to gradient_strength
 		//const real_type newton_strength_ =
@@ -188,13 +225,28 @@ int main(int argc, char** argv)
 		// ... therefore, the ratio of a_flat/a_Newton is equal to the
 		// the ratio of sampled gradient strength / gradient_strength for D = 3
 
-		real_type D3_gradient_strength = a_Newton * k * 2 * pi * emitter_mass / (receiver_pos.x * c * hbar * log(2));
+		real_type D3_gradient_strength = newton_strength * k * 2 * pi * emitter_mass / (receiver_pos.x * c * hbar * log(2));
+
+		//gradient_strength = newton_strength_ * k * 2 * pi * emitter_mass / (receiver_pos.x * c * hbar * log(2));
 
 		cout << gradient_strength << endl;
 		cout << D3_gradient_strength << endl;
 
 		cout << gradient_strength / D3_gradient_strength << endl;
-		//break;
+
+		break;
+
+
+
+
+		//const real_type newton_strength__ =
+		//	n * c * hbar * log(2)
+		//	/ (4 * k * pi * pow(receiver_pos.x, D - 1.0) * emitter_mass);
+
+		//cout << "r: " << r << " newton strength_: " << newton_strength / newton_strength_ << endl;
+		//cout << "r: " << r << " newton strength__: " << newton_strength / newton_strength__ << endl;
+
+
 
 
 

@@ -157,10 +157,7 @@ int main(int argc, char** argv)
 			-gradient_integer
 			/ (receiver_radius * receiver_radius);
 
-
-
 		//real_type y = n / (2.0 * pow(receiver_pos.x, D));
-
 
 		real_type a_Newton =
 			sqrt(
@@ -169,11 +166,8 @@ int main(int argc, char** argv)
 
 		real_type v_Newton = sqrt(a_Newton * receiver_pos.x);
 
-		real_type v_flat = v_Newton * 2.0;
+		real_type v_flat = v_Newton * 1.1;
 		real_type a_flat = pow(v_flat, 2.0) / receiver_pos.x;
-
-
-;
 
 		// Newtonian acceleration is proportional to gradient_strength
 		//const real_type newton_strength_ =
@@ -195,20 +189,16 @@ int main(int argc, char** argv)
 		}
 		else
 		{
+			cout << "Current D: " << D << endl;
 			cout << a_ratio << " " << grad_ratio << endl;
 		}
 
-
-
-
-
-
 		//out_file << D << " " << gradient_strength << endl;
-
 		//out_file2 << D << " " << y << endl;
 	}
 
-	return 0;
+	cout << "Found no sufficiently strong D" << endl;
+	return 1;
 }
 
 

@@ -73,7 +73,7 @@ long long signed int get_intersecting_line_count_integer(
 
 	for (long long signed int j = 0; j < n; j++)
 	{
-		if (j % 10000000 == 0)
+		if (j % 100000000 == 0)
 			cout << float(j) / float(n) << endl;
 
 		const vector_3 p = RandomUnitVector();
@@ -166,7 +166,7 @@ int main(int argc, char** argv)
 
 		real_type v_Newton = sqrt(a_Newton * receiver_pos.x);
 
-		real_type v_flat = v_Newton * 1.1;
+		real_type v_flat = v_Newton * 1.01;
 		real_type a_flat = pow(v_flat, 2.0) / receiver_pos.x;
 
 		// Newtonian acceleration is proportional to gradient_strength

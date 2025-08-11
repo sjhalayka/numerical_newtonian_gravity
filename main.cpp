@@ -119,7 +119,7 @@ int main(int argc, char** argv)
 
 	const real_type start_dim = 3.0;
 	const real_type end_dim = 2.0;
-	const size_t dim_res = 1000; // Larger than 1
+	const size_t dim_res = 100; // Larger than 1
 	const real_type dim_step_size = (end_dim - start_dim) / (dim_res - 1);
 
 	for (real_type D = start_dim; D >= end_dim; D += dim_step_size)
@@ -156,7 +156,7 @@ int main(int argc, char** argv)
 
 
 
-		real_type x = n / (2.0 * pow(receiver_pos.x, D));
+		//real_type x = n / (2.0 * pow(receiver_pos.x, D));
 
 		//cout << gradient_strength << endl;
 		//cout << x << endl;
@@ -171,7 +171,7 @@ int main(int argc, char** argv)
 
 		real_type v_Newton = sqrt(a_Newton * receiver_pos.x);
 
-		real_type v_flat = v_Newton *2.0;
+		real_type v_flat = v_Newton * 2.0;
 		real_type a_flat = pow(v_flat, 2.0) / receiver_pos.x;
 
 
@@ -222,10 +222,10 @@ int main(int argc, char** argv)
 
 		//gradient_strength = newton_strength_ * k * 2 * pi * emitter_mass / (receiver_pos.x * c * hbar * log(2));
 
-		cout << gradient_strength << endl;
-		cout << D3_gradient_strength << endl;
+		//cout << gradient_strength << endl;
+		//cout << D3_gradient_strength << endl;
 
-		cout << gradient_strength / D3_gradient_strength << endl;
+//		cout << gradient_strength / D3_gradient_strength << endl;
 
 		real_type a_ratio = a_flat / a_Newton;
 		real_type grad_ratio = gradient_strength / D3_gradient_strength;

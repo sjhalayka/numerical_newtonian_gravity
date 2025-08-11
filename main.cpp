@@ -131,6 +131,7 @@ int main(int argc, char** argv)
 		vector_3 receiver_pos_plus = receiver_pos;
 		receiver_pos_plus.x += epsilon;
 
+		// beta function
 		const long long unsigned int collision_count_plus_integer =
 			get_intersecting_line_count_integer(
 				static_cast<long long signed int>(n),
@@ -138,6 +139,7 @@ int main(int argc, char** argv)
 				receiver_radius,
 				D);
 
+		// beta function
 		const long long unsigned int collision_count_integer =
 			get_intersecting_line_count_integer(
 				static_cast<long long signed int>(n),
@@ -145,6 +147,7 @@ int main(int argc, char** argv)
 				receiver_radius,
 				D);
 
+		// alpha variable
 		const real_type gradient_integer =
 			(static_cast<real_type>(collision_count_plus_integer) - static_cast<real_type>(collision_count_integer))
 			/ epsilon;
@@ -156,12 +159,7 @@ int main(int argc, char** argv)
 
 
 
-		//real_type x = n / (2.0 * pow(receiver_pos.x, D));
-
-		//cout << gradient_strength << endl;
-		//cout << x << endl;
-
-		//cout << gradient_strength / x << endl;
+		//real_type y = n / (2.0 * pow(receiver_pos.x, D));
 
 
 		real_type a_Newton =
@@ -175,57 +173,16 @@ int main(int argc, char** argv)
 		real_type a_flat = pow(v_flat, 2.0) / receiver_pos.x;
 
 
+;
 
-		//real_type pow_exponent = D - 1.0;
-
-		//const real_type disk_like = 3.0 - D;
-		//pow_exponent = lerp(D - 1.0, D - 1.0, disk_like);
-//		pow_exponent = lerp(D - 1.0, D, disk_like);
-
-
-			//real_type a_flat_ =
-			//n * c * hbar * log(2.0) /
-			//(4 * k * pi * pow(receiver_pos.x, pow_exponent) * emitter_mass);
-
-
-
-
-		//cout << a_flat << endl;
-		//cout << a_flat_ << endl;
-		//cout << a_Newton << endl;
-
-
-
-		//const real_type newton_strength =
-		//	G * emitter_mass / pow(receiver_pos.x, 2.0);
-
-		//		cout << a_Newton << " " << newton_strength << endl;
-
-
-				//double v_Newton = sqrt(a_Newton * receiver_pos.x);
-				//double v_flat = 220000;
-
-				//double targetD = 3.0 -
-				//	log(v_flat * v_flat / (v_Newton * v_Newton)) /
-				//	log(receiver_pos.x);
-
-				//cout << D << " " << targetD << endl;
-
-				// Newtonian acceleration is proportional to gradient_strength
-				//const real_type newton_strength_ =
-				//	gradient_strength * receiver_pos.x * c * hbar * log(2)
-				//	/ (k * 2 * pi * emitter_mass);
-				// ... therefore, the ratio of a_flat/a_Newton is equal to the
-				// the ratio of sampled gradient strength / gradient_strength for D = 3
+		// Newtonian acceleration is proportional to gradient_strength
+		//const real_type newton_strength_ =
+		//	gradient_strength * receiver_pos.x * c * hbar * log(2)
+		//	/ (k * 2 * pi * emitter_mass);
+		// ... therefore, the ratio of a_flat/a_Newton is equal to the
+		// the ratio of sampled gradient strength / gradient_strength for D = 3
 
 		real_type D3_gradient_strength = a_Newton * k * 2 * pi * emitter_mass / (receiver_pos.x * c * hbar * log(2));
-
-		//gradient_strength = newton_strength_ * k * 2 * pi * emitter_mass / (receiver_pos.x * c * hbar * log(2));
-
-		//cout << gradient_strength << endl;
-		//cout << D3_gradient_strength << endl;
-
-//		cout << gradient_strength / D3_gradient_strength << endl;
 
 		real_type a_ratio = a_flat / a_Newton;
 		real_type grad_ratio = gradient_strength / D3_gradient_strength;
@@ -242,29 +199,13 @@ int main(int argc, char** argv)
 		}
 
 
-		//break;
-
-
-
-
-		//const real_type newton_strength__ =
-		//	n * c * hbar * log(2)
-		//	/ (4 * k * pi * pow(receiver_pos.x, D - 1.0) * emitter_mass);
-
-		//cout << "r: " << r << " newton strength_: " << newton_strength / newton_strength_ << endl;
-		//cout << "r: " << r << " newton strength__: " << newton_strength / newton_strength__ << endl;
-
-
-
-
-
 
 
 
 
 		//out_file << D << " " << gradient_strength << endl;
 
-		//out_file2 << D << " " << x << endl;
+		//out_file2 << D << " " << y << endl;
 	}
 
 	return 0;

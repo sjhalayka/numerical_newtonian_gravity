@@ -94,10 +94,6 @@ long long signed int get_intersecting_line_count_integer(
 	return count;
 }
 
-real_type lerp(real_type a, real_type b, real_type t)
-{
-	return a + t * (b - a);
-}
 
 int main(int argc, char** argv)
 {
@@ -115,11 +111,11 @@ int main(int argc, char** argv)
 
 	const real_type emitter_mass = c2 * emitter_radius / (2.0 * G);
 
-	ofstream out_file("numerical");
-	out_file << setprecision(30);
+	//ofstream out_file("numerical");
+	//out_file << setprecision(30);
 
-	ofstream out_file2("analytical");
-	out_file2 << setprecision(30);
+	//ofstream out_file2("analytical");
+	//out_file2 << setprecision(30);
 
 	const real_type start_dim = 3.0;
 	const real_type end_dim = 2.0;
@@ -175,7 +171,7 @@ int main(int argc, char** argv)
 
 		real_type v_Newton = sqrt(a_Newton * receiver_pos.x);
 
-		real_type v_flat = 220000;
+		real_type v_flat = v_Newton *2.0;
 		real_type a_flat = pow(v_flat, 2.0) / receiver_pos.x;
 
 
@@ -200,8 +196,8 @@ int main(int argc, char** argv)
 
 
 
-		const real_type newton_strength =
-			G * emitter_mass / pow(receiver_pos.x, 2.0);
+		//const real_type newton_strength =
+		//	G * emitter_mass / pow(receiver_pos.x, 2.0);
 
 		//		cout << a_Newton << " " << newton_strength << endl;
 
@@ -222,7 +218,7 @@ int main(int argc, char** argv)
 				// ... therefore, the ratio of a_flat/a_Newton is equal to the
 				// the ratio of sampled gradient strength / gradient_strength for D = 3
 
-		real_type D3_gradient_strength = newton_strength * k * 2 * pi * emitter_mass / (receiver_pos.x * c * hbar * log(2));
+		real_type D3_gradient_strength = a_Newton * k * 2 * pi * emitter_mass / (receiver_pos.x * c * hbar * log(2));
 
 		//gradient_strength = newton_strength_ * k * 2 * pi * emitter_mass / (receiver_pos.x * c * hbar * log(2));
 
@@ -230,6 +226,21 @@ int main(int argc, char** argv)
 		cout << D3_gradient_strength << endl;
 
 		cout << gradient_strength / D3_gradient_strength << endl;
+
+		real_type a_ratio = a_flat / a_Newton;
+		real_type grad_ratio = gradient_strength / D3_gradient_strength;
+
+		if (grad_ratio >= (a_ratio - 0.001))
+		{
+			cout << "Final D: " << D << endl;
+			cout << a_ratio << " " << grad_ratio << endl;
+			return 0;
+		}
+		else
+		{
+			cout << a_ratio << " " << grad_ratio << endl;
+		}
+
 
 		//break;
 
@@ -251,9 +262,9 @@ int main(int argc, char** argv)
 
 
 
-		out_file << D << " " << gradient_strength << endl;
+		//out_file << D << " " << gradient_strength << endl;
 
-		out_file2 << D << " " << x << endl;
+		//out_file2 << D << " " << x << endl;
 	}
 
 	return 0;

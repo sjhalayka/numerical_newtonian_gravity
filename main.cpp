@@ -36,8 +36,8 @@ real_type Lerp(real_type a, real_type b, real_type t)
 }
 
 bool circle_intersect(
-	const vector_3 normal, 
-	const real_type circle_location, 
+	const vector_3 normal,
+	const real_type circle_location,
 	const real_type circle_radius)
 {
 	vector_3 outline_dir(circle_location, circle_radius, 0);
@@ -102,7 +102,7 @@ real_type lerp(real_type a, real_type b, real_type t)
 int main(int argc, char** argv)
 {
 	const real_type receiver_radius = 1.0;
-	real_type emitter_radius = sqrt((10e7 * G * hbar * log(2.0)) / (k * c3 * pi));
+	real_type emitter_radius = sqrt((10e8 * G * hbar * log(2.0)) / (k * c3 * pi));
 
 	const real_type emitter_area =
 		4.0 * pi * emitter_radius * emitter_radius;
@@ -121,12 +121,12 @@ int main(int argc, char** argv)
 	ofstream out_file2("analytical");
 	out_file2 << setprecision(30);
 
-	const real_type start_dim = 2.0;
-	const real_type end_dim = 3.0;
+	const real_type start_dim = 3.0;
+	const real_type end_dim = 2.0;
 	const size_t dim_res = 1000; // Larger than 1
 	const real_type dim_step_size = (end_dim - start_dim) / (dim_res - 1);
 
-	for (real_type D = start_dim; D <= end_dim; D += dim_step_size)
+	for (real_type D = start_dim; D >= end_dim; D += dim_step_size)
 	{
 		const vector_3 receiver_pos(100, 0, 0);
 
@@ -168,20 +168,17 @@ int main(int argc, char** argv)
 		//cout << gradient_strength / x << endl;
 
 
+		real_type a_Newton =
+			sqrt(
+				(n * G * c * hbar * log(2.0)) /
+				(4 * k * pi * pow(receiver_pos.x, 4.0)));
+
+		real_type v_Newton = sqrt(a_Newton * receiver_pos.x);
+
 		real_type v_flat = 220000;
 		real_type a_flat = pow(v_flat, 2.0) / receiver_pos.x;
 
-		//real_type a_Newton =
-		//	sqrt(
-		//		(n * G * c * hbar * log(2.0)) /
-		//		(4 * k * pi * pow(receiver_pos.x, 4.0)));
 
-		//// = G * emitter_mass / pow(receiver_pos.x, 2.0);
-
-
-
-
-		//real_type v_Newton = sqrt(a_Newton * receiver_pos.x);
 
 		//real_type pow_exponent = D - 1.0;
 
@@ -194,7 +191,7 @@ int main(int argc, char** argv)
 			//n * c * hbar * log(2.0) /
 			//(4 * k * pi * pow(receiver_pos.x, pow_exponent) * emitter_mass);
 
-		
+
 
 
 		//cout << a_flat << endl;
@@ -206,24 +203,24 @@ int main(int argc, char** argv)
 		const real_type newton_strength =
 			G * emitter_mass / pow(receiver_pos.x, 2.0);
 
-//		cout << a_Newton << " " << newton_strength << endl;
+		//		cout << a_Newton << " " << newton_strength << endl;
 
 
-		//double v_Newton = sqrt(a_Newton * receiver_pos.x);
-		//double v_flat = 220000;
+				//double v_Newton = sqrt(a_Newton * receiver_pos.x);
+				//double v_flat = 220000;
 
-		//double targetD = 3.0 -
-		//	log(v_flat * v_flat / (v_Newton * v_Newton)) /
-		//	log(receiver_pos.x);
+				//double targetD = 3.0 -
+				//	log(v_flat * v_flat / (v_Newton * v_Newton)) /
+				//	log(receiver_pos.x);
 
-		//cout << D << " " << targetD << endl;
+				//cout << D << " " << targetD << endl;
 
-		// Newtonian acceleration is proportional to gradient_strength
-		//const real_type newton_strength_ =
-		//	gradient_strength * receiver_pos.x * c * hbar * log(2)
-		//	/ (k * 2 * pi * emitter_mass);
-		// ... therefore, the ratio of a_flat/a_Newton is equal to the
-		// the ratio of sampled gradient strength / gradient_strength for D = 3
+				// Newtonian acceleration is proportional to gradient_strength
+				//const real_type newton_strength_ =
+				//	gradient_strength * receiver_pos.x * c * hbar * log(2)
+				//	/ (k * 2 * pi * emitter_mass);
+				// ... therefore, the ratio of a_flat/a_Newton is equal to the
+				// the ratio of sampled gradient strength / gradient_strength for D = 3
 
 		real_type D3_gradient_strength = newton_strength * k * 2 * pi * emitter_mass / (receiver_pos.x * c * hbar * log(2));
 
@@ -234,7 +231,7 @@ int main(int argc, char** argv)
 
 		cout << gradient_strength / D3_gradient_strength << endl;
 
-		break;
+		//break;
 
 
 

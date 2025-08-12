@@ -1,7 +1,7 @@
 #include "main.h"
 
 
-vector_3 RandomUnitVector(void)
+vector_3 random_unit_vector(void)
 {
 	const real_type z = dis(generator) * 2.0 - 1.0;
 	const real_type a = dis(generator) * 2.0 * pi;
@@ -13,7 +13,7 @@ vector_3 RandomUnitVector(void)
 	return vector_3(x, y, z).normalize();
 }
 
-vector_3 SLerp(vector_3 s0, vector_3 s1, const real_type t)
+vector_3 slerp(vector_3 s0, vector_3 s1, const real_type t)
 {
 	vector_3 s0_norm = s0;
 	s0_norm.normalize();
@@ -76,7 +76,7 @@ long long signed int get_intersecting_line_count_integer(
 		if (j % 100000000 == 0)
 			cout << float(j) / float(n) << endl;
 
-		const vector_3 p = RandomUnitVector();
+		const vector_3 p = random_unit_vector();
 
 		vector_3 p_disk = p;
 		p_disk.y = 0;
@@ -85,7 +85,7 @@ long long signed int get_intersecting_line_count_integer(
 		if (p_disk.length() == 0)
 			cout << "uh oh" << endl;
 
-		const vector_3 normal = SLerp(p, p_disk, disk_like);
+		const vector_3 normal = slerp(p, p_disk, disk_like);
 
 		if (circle_intersect(normal, sphere_location.x, sphere_radius))
 			count++;
@@ -98,7 +98,7 @@ long long signed int get_intersecting_line_count_integer(
 int main(int argc, char** argv)
 {
 	const real_type receiver_radius = 1.0;
-	real_type emitter_radius = sqrt((10e8 * G * hbar * log(2.0)) / (k * c3 * pi));
+	real_type emitter_radius = sqrt((10e10 * G * hbar * log(2.0)) / (k * c3 * pi));
 
 	const real_type emitter_area =
 		4.0 * pi * emitter_radius * emitter_radius;
@@ -122,7 +122,8 @@ int main(int argc, char** argv)
 	const size_t dim_res = 100; // Larger than 1
 	const real_type dim_step_size = (end_dim - start_dim) / (dim_res - 1);
 
-	for (real_type D = start_dim; D >= end_dim; D += dim_step_size)
+	// Skip D = 3 for testing purposes
+	for (real_type D = start_dim + dim_step_size; D >= end_dim; D += dim_step_size)
 	{
 		const vector_3 receiver_pos(100, 0, 0);
 
@@ -166,7 +167,7 @@ int main(int argc, char** argv)
 
 		real_type v_Newton = sqrt(a_Newton * receiver_pos.x);
 
-		real_type v_flat = v_Newton * 1.01;
+		real_type v_flat = v_Newton * 1.1;
 		real_type a_flat = pow(v_flat, 2.0) / receiver_pos.x;
 
 		// Newtonian acceleration is proportional to gradient_strength

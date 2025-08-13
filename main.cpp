@@ -153,6 +153,7 @@ int main(int argc, char** argv)
 			(static_cast<real_type>(collision_count_plus_integer) - static_cast<real_type>(collision_count_integer))
 			/ epsilon;
 
+		// g variable
 		real_type gradient_strength =
 			-gradient_integer
 			/ (receiver_radius * receiver_radius);

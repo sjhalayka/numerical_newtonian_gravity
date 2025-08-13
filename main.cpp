@@ -160,13 +160,16 @@ int main(int argc, char** argv)
 
 		//real_type y = n / (2.0 * pow(receiver_pos.x, D));
 
+		// Newtonian acceleration
 		real_type a_Newton =
 			sqrt(
 				(n * G * c * hbar * log(2.0)) /
 				(4 * k * pi * pow(receiver_pos.x, 4.0)));
 
+		// Newtonian speed
 		real_type v_Newton = sqrt(a_Newton * receiver_pos.x);
 
+		// Rubinian variables
 		real_type v_flat = v_Newton * 1.1;
 		real_type a_flat = pow(v_flat, 2.0) / receiver_pos.x;
 

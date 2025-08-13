@@ -98,7 +98,7 @@ long long signed int get_intersecting_line_count_integer(
 int main(int argc, char** argv)
 {
 	const real_type receiver_radius = 1.0;
-	real_type emitter_radius = sqrt((10e10 * G * hbar * log(2.0)) / (k * c3 * pi));
+	real_type emitter_radius = sqrt((10e11 * G * hbar * log(2.0)) / (k * c3 * pi));
 
 	const real_type emitter_area =
 		4.0 * pi * emitter_radius * emitter_radius;

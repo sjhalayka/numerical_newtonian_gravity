@@ -123,7 +123,7 @@ int main(int argc, char** argv)
 	const real_type dim_step_size = (end_dim - start_dim) / (dim_res - 1);
 
 	// Skip D = 3 for testing purposes
-	for (real_type D = start_dim + dim_step_size; D >= end_dim; D += dim_step_size)
+	for (real_type D = start_dim; D >= end_dim; D += dim_step_size)
 	{
 		const vector_3 receiver_pos(100, 0, 0);
 
@@ -196,6 +196,8 @@ int main(int argc, char** argv)
 			cout << "Current D: " << D << endl;
 			cout << a_ratio << " " << grad_ratio << endl;
 		}
+
+		//break;
 
 		//out_file << D << " " << gradient_strength << endl;
 		//out_file2 << D << " " << y << endl;

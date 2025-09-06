@@ -96,8 +96,8 @@ bool circle_intersect(
 	const real_type circle_radius)
 {
 	vector_3 outline_dir(
-		circle_location, 
-		circle_radius, 
+		circle_location,
+		circle_radius,
 		0);
 
 	outline_dir.normalize();
@@ -212,7 +212,7 @@ long long signed int get_intersecting_line_count_integer(
 int main(int argc, char** argv)
 {
 	const real_type receiver_radius = 1.0;
-	real_type emitter_radius = sqrt((10e10 * G * hbar * log(2.0)) / (k * c3 * pi));
+	real_type emitter_radius = sqrt((10e8 * G * hbar * log(2.0)) / (k * c3 * pi));
 
 	const real_type emitter_area =
 		4.0 * pi * emitter_radius * emitter_radius;
@@ -285,8 +285,8 @@ int main(int argc, char** argv)
 		real_type v_Newton = sqrt(a_Newton * receiver_pos.x);
 
 
-		
-		if(v_flat_target == 0)
+
+		if (v_flat_target == 0)
 			v_flat_target = v_Newton * 2.0; // please set this to some constant that suits your liking
 
 
@@ -304,13 +304,17 @@ int main(int argc, char** argv)
 		if (v_flat >= v_flat_target)
 		{
 			cout << "Final D: " << D << endl;
-			cout << v_flat << " " << v_flat_target << endl;
+			cout << "v_Newton:      " << v_Newton << endl;
+			cout << "v_flat         " << v_flat << endl;
+			cout << "v_flat_target: " << v_flat_target << endl;
 			return 0;
 		}
 		else
 		{
 			cout << "Current D: " << D << endl;
-			cout << v_flat << " " << v_flat_target << endl;
+			cout << "v_Newton:      " << v_Newton << endl;
+			cout << "v_flat         " << v_flat << endl;
+			cout << "v_flat_target: " << v_flat_target << endl;
 		}
 
 		out_file << D << " " << /*pow(c, 3 - D) * */gradient_strength << endl;

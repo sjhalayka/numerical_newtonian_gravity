@@ -30,17 +30,16 @@ vector_3 slerp(vector_3 s0, vector_3 s1, const real_type t)
 	return s0 * p0_factor + s1 * p1_factor;
 }
 
-real_type Lerp(real_type a, real_type b, real_type t)
-{
-	return a + t * (b - a);
-}
-
 bool circle_intersect(
 	const vector_3 normal,
 	const real_type circle_location,
 	const real_type circle_radius)
 {
-	vector_3 outline_dir(circle_location, circle_radius, 0);
+	vector_3 outline_dir(
+		circle_location, 
+		circle_radius, 
+		0);
+
 	outline_dir.normalize();
 
 	static const vector_3 v(1, 0, 0);
@@ -58,14 +57,14 @@ bool circle_intersect(
 	return true;
 }
 
+
 long long signed int get_intersecting_line_count_integer(
 	const long long signed int n,
 	const vector_3 sphere_location,
-	const real_type sphere_radius,
-	const real_type D)
+	const double sphere_radius,
+	const double D)
 {
-	const real_type disk_like = 3.0 - D;
-	//const real_type fractionality = 1.0 - 2.0 * (0.5 - fmod(D, 1.0));
+	const double disk_like = 3.0 - D;
 
 	long long signed int count = 0;
 
@@ -82,9 +81,6 @@ long long signed int get_intersecting_line_count_integer(
 		p_disk.y = 0;
 		p_disk.normalize();
 
-		if (p_disk.length() == 0)
-			cout << "uh oh" << endl;
-
 		const vector_3 normal = slerp(p, p_disk, disk_like);
 
 		if (circle_intersect(normal, sphere_location.x, sphere_radius))
@@ -94,11 +90,69 @@ long long signed int get_intersecting_line_count_integer(
 	return count;
 }
 
+//long long signed int get_intersecting_line_count_integer(
+//	const long long signed int n,
+//	const vector_3 sphere_location,
+//	const real_type sphere_radius,
+//	const real_type D)
+//{
+//	const real_type filament_like = 3.0 - (D + 1);
+//	const real_type disk_like = 3.0 - D;
+//	bool disk = true;
+//
+//	if (D < 2)
+//		disk = false;
+//
+//	long long signed int count = 0;
+//
+//	generator.seed(static_cast<unsigned>(0));
+//
+//	for (long long signed int j = 0; j < n; j++)
+//	{
+//		if (j % 100000000 == 0)
+//			cout << float(j) / float(n) << endl;
+//
+//		const vector_3 p = random_unit_vector();
+//
+//		vector_3 p_disk = p;
+//		p_disk.y = 0;
+//		p_disk.normalize();
+//
+//		if (p_disk.length() == 0)
+//			cout << "uh oh" << endl;
+//
+//		vector_3 p_bidirectional = p;
+//		p_bidirectional.y = 0;
+//		p_bidirectional.z = 0;
+//		p_bidirectional.normalize();
+//
+//		if (p_bidirectional.length() == 0)
+//			cout << "uh oh" << endl;
+//
+//		vector_3 normal;
+//		
+//		if(disk)
+//			normal = slerp(p, p_disk, disk_like);
+//		else
+//			normal = slerp(p_disk, p_bidirectional, filament_like);
+//
+//		if (circle_intersect(normal, sphere_location.x, sphere_radius))
+//			count++;
+//	}
+//
+//	return count;
+//}
+//
+
+
+
+
+
 
 int main(int argc, char** argv)
 {
 	const real_type receiver_radius = 1.0;
-	real_type emitter_radius = sqrt((10e11 * G * hbar * log(2.0)) / (k * c3 * pi));
+	real_type emitter_radius = sqrt((10e10 * G * hbar * log(2.0)) / (k * c3 * pi));
 
 	const real_type emitter_area =
 		4.0 * pi * emitter_radius * emitter_radius;
@@ -111,18 +165,19 @@ int main(int argc, char** argv)
 
 	const real_type emitter_mass = c2 * emitter_radius / (2.0 * G);
 
-	//ofstream out_file("numerical");
-	//out_file << setprecision(30);
+	ofstream out_file("numerical");
+	out_file << setprecision(30);
 
-	//ofstream out_file2("analytical");
-	//out_file2 << setprecision(30);
+	ofstream out_file2("analytical");
+	out_file2 << setprecision(30);
 
 	const real_type start_dim = 3.0;
 	const real_type end_dim = 2.0;
-	const size_t dim_res = 100; // Larger than 1
+	const size_t dim_res = 10; // Larger than 1
 	const real_type dim_step_size = (end_dim - start_dim) / (dim_res - 1);
 
-	// Skip D = 3 for testing purposes
+	real_type v_flat_target = 0;
+
 	for (real_type D = start_dim; D >= end_dim; D += dim_step_size)
 	{
 		const vector_3 receiver_pos(100, 0, 0);
@@ -158,7 +213,7 @@ int main(int argc, char** argv)
 			-gradient_integer
 			/ (receiver_radius * receiver_radius);
 
-		//real_type y = n / (2.0 * pow(receiver_pos.x, D));
+		real_type y = n / (2.0 * pow(receiver_pos.x, D));
 
 		// Newtonian acceleration
 		real_type a_Newton =
@@ -169,38 +224,37 @@ int main(int argc, char** argv)
 		// Newtonian speed
 		real_type v_Newton = sqrt(a_Newton * receiver_pos.x);
 
+
+		
+		if(v_flat_target == 0)
+			v_flat_target = v_Newton * 2.0; // please set this to some constant that suits your liking
+
+
+
+
 		// Rubinian variables
-		real_type v_flat = v_Newton * 1.1;
-		real_type a_flat = pow(v_flat, 2.0) / receiver_pos.x;
-
+		// 
 		// Newtonian acceleration is proportional to gradient_strength
-		//const real_type newton_strength_ =
-		//	gradient_strength * receiver_pos.x * c * hbar * log(2)
-		//	/ (k * 2 * pi * emitter_mass);
-		// ... therefore, the ratio of a_flat/a_Newton is equal to the
-		// the ratio of sampled gradient strength / gradient_strength for D = 3
+		const real_type a_flat =
+			gradient_strength * receiver_pos.x * c * hbar * log(2)
+			/ (k * 2 * pi * emitter_mass);
 
-		real_type D3_gradient_strength = a_Newton * k * 2 * pi * emitter_mass / (receiver_pos.x * c * hbar * log(2));
+		const real_type v_flat = sqrt(a_flat * receiver_pos.x);
 
-		real_type a_ratio = a_flat / a_Newton;
-		real_type grad_ratio = gradient_strength / D3_gradient_strength;
-
-		if (grad_ratio >= (a_ratio - 0.001))
+		if (v_flat >= v_flat_target)
 		{
 			cout << "Final D: " << D << endl;
-			cout << a_ratio << " " << grad_ratio << endl;
+			cout << v_flat << " " << v_flat_target << endl;
 			return 0;
 		}
 		else
 		{
 			cout << "Current D: " << D << endl;
-			cout << a_ratio << " " << grad_ratio << endl;
+			cout << v_flat << " " << v_flat_target << endl;
 		}
 
-		//break;
-
-		//out_file << D << " " << gradient_strength << endl;
-		//out_file2 << D << " " << y << endl;
+		out_file << D << " " << /*pow(c, 3 - D) * */gradient_strength << endl;
+		out_file2 << D << " " << /*pow(c, 3 - D) **/ y << endl;
 	}
 
 	cout << "Found no sufficiently strong D" << endl;

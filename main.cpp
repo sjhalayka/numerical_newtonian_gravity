@@ -269,20 +269,20 @@ int main(int argc, char** argv)
 			/ epsilon;
 
 		// g variable
-		real_type gradient_strength =
+		const real_type gradient_strength =
 			-gradient_integer
 			/ (receiver_radius * receiver_radius);
 
-		real_type y = n / (2.0 * pow(receiver_pos.x, D));
+		const real_type y = n / (2.0 * pow(receiver_pos.x, D));
 
 		// Newtonian acceleration
-		real_type a_Newton =
+		const real_type a_Newton =
 			sqrt(
 				(n * G * c * hbar * log(2.0)) /
 				(4 * k * pi * pow(receiver_pos.x, 4.0)));
 
 		// Newtonian speed
-		real_type v_Newton = sqrt(a_Newton * receiver_pos.x);
+		const real_type v_Newton = sqrt(a_Newton * receiver_pos.x);
 
 
 
@@ -290,10 +290,6 @@ int main(int argc, char** argv)
 			v_flat_target = v_Newton * 2.0; // please set this to some constant that suits your liking
 
 
-
-
-		// Rubinian variables
-		// 
 		// Newtonian acceleration is proportional to gradient_strength
 		const real_type a_flat =
 			gradient_strength * receiver_pos.x * c * hbar * log(2)
@@ -301,12 +297,18 @@ int main(int argc, char** argv)
 
 		const real_type v_flat = sqrt(a_flat * receiver_pos.x);
 
+		real_type D3_gradient_strength = a_Newton * k * 2 * pi * emitter_mass / (receiver_pos.x * c * hbar * log(2));
+		//real_type Dx_gradient_strength = a_flat * k * 2 * pi * emitter_mass / (receiver_pos.x * c * hbar * log(2));
+
 		if (v_flat >= v_flat_target)
 		{
 			cout << "Final D: " << D << endl;
 			cout << "v_Newton:      " << v_Newton << endl;
 			cout << "v_flat         " << v_flat << endl;
 			cout << "v_flat_target: " << v_flat_target << endl;
+			cout << "gradient_strength:    " << gradient_strength << endl;
+			cout << "D3_gradient_strength: " << D3_gradient_strength << endl;
+			//cout << "Dx_gradient_strength: " << Dx_gradient_strength << endl;
 			return 0;
 		}
 		else
@@ -315,6 +317,9 @@ int main(int argc, char** argv)
 			cout << "v_Newton:      " << v_Newton << endl;
 			cout << "v_flat         " << v_flat << endl;
 			cout << "v_flat_target: " << v_flat_target << endl;
+			cout << "gradient_strength:    " << gradient_strength << endl;
+			cout << "D3_gradient_strength: " << D3_gradient_strength << endl;
+			//cout << "Dx_gradient_strength: " << Dx_gradient_strength << endl;
 		}
 
 		out_file << D << " " << /*pow(c, 3 - D) * */gradient_strength << endl;

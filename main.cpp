@@ -98,7 +98,7 @@ long long signed int get_intersecting_line_count_integer(
 int main(int argc, char** argv)
 {
 	const real_type receiver_radius = 1.0;
-	real_type emitter_radius = sqrt((10e8 * G * hbar * log(2.0)) / (k * c3 * pi));
+	real_type emitter_radius = sqrt((10e9 * G * hbar * log(2.0)) / (k * c3 * pi));
 
 	const real_type emitter_area =
 		4.0 * pi * emitter_radius * emitter_radius;
@@ -112,13 +112,6 @@ int main(int argc, char** argv)
 	const real_type emitter_mass = c2 * emitter_radius / (2.0 * G);
 
 	real_type v_flat_target = 0;
-
-
-	//ofstream out_file("numerical");
-	//out_file << setprecision(30);
-
-	//ofstream out_file2("analytical");
-	//out_file2 << setprecision(30);
 
 	const real_type start_dim = 3.0;
 	const real_type end_dim = 2.0;
@@ -182,9 +175,6 @@ int main(int argc, char** argv)
 
 
 
-
-		//real_type a_flat_target = sqrt(v_flat_target * receiver_pos.x);
-
 		const real_type a_flat =
 			gradient_strength * receiver_pos.x * c * hbar * log(2)
 			/ (k * 2 * pi * emitter_mass);
@@ -193,17 +183,7 @@ int main(int argc, char** argv)
 
 
 
-		// Newtonian acceleration is proportional to gradient_strength
-		//const real_type newton_strength_ =
-		//	gradient_strength * receiver_pos.x * c * hbar * log(2)
-		//	/ (k * 2 * pi * emitter_mass);
-		// ... therefore, the ratio of a_flat/a_Newton is equal to the
-		// the ratio of sampled gradient strength / gradient_strength for D = 3
 
-		//real_type D3_gradient_strength = a_Newton * k * 2 * pi * emitter_mass / (receiver_pos.x * c * hbar * log(2));
-
-		//real_type a_ratio = a_flat / a_Newton;
-		//real_type grad_ratio = gradient_strength / D3_gradient_strength;
 
 		if (v_flat >= v_flat_target)
 		{
@@ -216,11 +196,6 @@ int main(int argc, char** argv)
 			cout << "Current D: " << D << endl;
 			cout << v_Newton << " " << v_flat << " " << v_flat_target << endl;
 		}
-
-		//break;
-
-		//out_file << D << " " << gradient_strength << endl;
-		//out_file2 << D << " " << y << endl;
 	}
 
 	cout << "Found no sufficiently strong D" << endl;

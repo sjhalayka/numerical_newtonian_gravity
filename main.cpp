@@ -183,7 +183,7 @@ int main(int argc, char** argv)
 
 
 
-		real_type a_flat_target = sqrt(v_flat_target * receiver_pos.x);
+		//real_type a_flat_target = sqrt(v_flat_target * receiver_pos.x);
 
 		const real_type a_flat =
 			gradient_strength * receiver_pos.x * c * hbar * log(2)

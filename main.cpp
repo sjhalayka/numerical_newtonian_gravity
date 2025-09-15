@@ -56,6 +56,34 @@ bool circle_intersect(
 		return false;
 
 	return true;
+
+
+
+
+	//const vector_3 circle_origin(circle_location, 0, 0);
+
+//if (normal.dot(circle_origin) <= 0)
+//	return false;
+
+//vector_3 v = location + normal;
+
+//const real_type ratio = v.x / circle_origin.x;
+
+//v.y = v.y / ratio;
+//v.z = v.z / ratio;
+//v.x = circle_origin.x;
+
+//vector_3 v2;
+//v2.x = circle_origin.x - v.x;
+//v2.y = circle_origin.y - v.y;
+//v2.z = circle_origin.z - v.z;
+
+//if (v2.length() > circle_radius)
+//	return false;
+
+//return true;
+
+
 }
 
 long long signed int get_intersecting_line_count_integer(
@@ -113,6 +141,7 @@ int main(int argc, char** argv)
 
 	real_type v_flat_target = 0;
 
+
 	const real_type start_dim = 3.0;
 	const real_type end_dim = 2.0;
 	const size_t dim_res = 10; // Larger than 1
@@ -156,13 +185,14 @@ int main(int argc, char** argv)
 
 		//real_type y = n / (2.0 * pow(receiver_pos.x, D));
 
+
+
+
 		// Newtonian acceleration
 		real_type a_Newton =
 			sqrt(
 				(n * G * c * hbar * log(2.0)) /
 				(4 * k * pi * pow(receiver_pos.x, 4.0)));
-
-
 
 		// Newtonian speed
 		real_type v_Newton = sqrt(a_Newton * receiver_pos.x);
@@ -180,10 +210,6 @@ int main(int argc, char** argv)
 			/ (k * 2 * pi * emitter_mass);
 
 		real_type v_flat = sqrt(a_flat * receiver_pos.x);
-
-
-
-
 
 		if (v_flat >= v_flat_target)
 		{
